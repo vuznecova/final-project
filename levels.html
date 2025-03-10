@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Уровни экспозиции</title>
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <header>
+      <nav>
+        <ul>
+          <li><a href="index.html">Главная</a></li>
+          <li><a href="how-it-works.html">Как это работает</a></li>
+          <li><a href="levels.html">Уровни</a></li>
+          <li><a href="progress.html">Прогресс</a></li>
+          <li><a href="about.html">О проекте</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <main>
+      <section class="levels-horizontal">
+        <h1>Выберите уровень экспозиции</h1>
+
+        <!-- Левая стрелка -->
+        <div class="arrow left">
+          <!-- SVG-иконка «стрелка влево» -->
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+               stroke-linecap="round" stroke-linejoin="round">
+            <path d="M15 18l-6-6 6-6" />
+          </svg>
+        </div>
+
+        <!-- Правая стрелка -->
+        <div class="arrow right">
+          <!-- SVG-иконка «стрелка вправо» -->
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+               stroke-linecap="round" stroke-linejoin="round">
+            <path d="M9 18l6-6-6-6" />
+          </svg>
+        </div>
+
+        <!-- Трек с карточками -->
+        <div class="levels-track">
+          <div class="level">
+            <img src="assets/level1-thumb.jpg" alt="Уровень 1">
+            <h2>Уровень 1</h2>
+            <p>Небольшая высота, легкий старт.</p>
+            <a href="panorama.html?level=1" class="btn">Выбрать</a>
+          </div>
+
+          <div class="level">
+            <img src="assets/level2-thumb.jpg" alt="Уровень 2">
+            <h2>Уровень 2</h2>
+            <p>Средняя высота, усиление прогресса.</p>
+            <a href="panorama.html?level=2" class="btn">Выбрать</a>
+          </div>
+
+          <div class="level">
+            <img src="assets/level3-thumb.jpg" alt="Уровень 3">
+            <h2>Уровень 3</h2>
+            <p>Высокая точка, максимальное воздействие.</p>
+            <a href="panorama.html?level=3" class="btn">Выбрать</a>
+          </div>
+          
+          <div class="level">
+            <img src="assets/level2-thumb.jpg" alt="Уровень 2">
+            <h2>Уровень 4</h2>
+            <p>Средняя высота, усиление прогресса.</p>
+            <a href="panorama.html?level=2" class="btn">Выбрать</a>
+          </div>
+          
+          <div class="level">
+            <img src="assets/level2-thumb.jpg" alt="Уровень 2">
+            <h2>Уровень 5</h2>
+            <p>Средняя высота, усиление прогресса.</p>
+            <a href="panorama.html?level=2" class="btn">Выбрать</a>
+          </div>
+          
+          <div class="level">
+            <img src="assets/level2-thumb.jpg" alt="Уровень 2">
+            <h2>Уровень 6</h2>
+            <p>Средняя высота, усиление прогресса.</p>
+            <a href="panorama.html?level=2" class="btn">Выбрать</a>
+          </div>
+          
+          <div class="level">
+            <img src="assets/level2-thumb.jpg" alt="Уровень 2">
+            <h2>Уровень 7</h2>
+            <p>Средняя высота, усиление прогресса.</p>
+            <a href="panorama.html?level=2" class="btn">Выбрать</a>
+          </div>
+      </section>
+    </main>
+
+    <footer>
+      <p>&copy; 2025 VR Therapy App. Все права защищены.</p>
+    </footer>
+
+    <!-- Скрипт управления каруселью -->
+    <script src="js/carousel.js"></script>
+
+  </body>
+</html>

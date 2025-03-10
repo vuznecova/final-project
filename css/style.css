@@ -1,0 +1,355 @@
+/* ---------------------------------------
+   Подключаем современный шрифт Montserrat
+------------------------------------------ */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600&display=swap');
+
+/* Сброс базовых отступов */
+html, body {
+  margin: 0;
+  padding: 0;
+}
+
+/* ---------------------------------------
+   Базовые стили для всего сайта
+------------------------------------------ */
+body {
+  font-family: 'Montserrat', sans-serif;
+  background: #fff0f6; /* Очень светлый розовый */
+  color: #333;
+  line-height: 1.6;
+  position: relative;
+  overflow-x: hidden; /* Чтобы пузыри не создавали горизонтальную прокрутку */
+  transition: background 0.3s ease;
+}
+
+/* Пузыри на фоне body */
+body::before,
+body::after {
+  content: "";
+  position: absolute;
+  border-radius: 50%;
+  z-index: -1; /* помещаем за основным контентом */
+}
+
+/* Первый пузырь (сверху слева) */
+body::before {
+  top: -100px;
+  left: -100px;
+  width: 400px;
+  height: 400px;
+  background: #ffb3d9;
+  opacity: 0.5;
+}
+
+/* Второй пузырь (снизу справа) */
+body::after {
+  bottom: -100px;
+  right: -100px;
+  width: 300px;
+  height: 300px;
+  background: #ff66b2;
+  opacity: 0.3;
+}
+
+/* ---------------------------------------
+   Шапка (header)
+------------------------------------------ */
+header {
+  background: linear-gradient(90deg, #ff66b2, #ff99cc);
+  color: #fff;
+  padding: 15px 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  position: relative;
+  z-index: 100;
+}
+
+header nav ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+}
+
+header nav ul li {
+  margin: 0 15px;
+}
+
+header nav ul li a {
+  color: #fff;
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.3s ease, transform 0.3s ease;
+}
+
+header nav ul li a:hover {
+  color: #ffe6f2;
+  transform: scale(1.05);
+}
+
+/* ---------------------------------------
+   Подвал (footer)
+------------------------------------------ */
+footer {
+  background: #ff66b2;
+  color: #fff;
+  text-align: center;
+  padding: 15px 20px;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* ---------------------------------------
+   Основная часть (main)
+------------------------------------------ */
+main {
+  padding: 40px 20px;
+  /* Чтобы контент не прятался под футером */
+  padding-bottom: 100px;
+}
+
+/* ---------------------------------------
+   Пример Hero-секции (можно убрать, если не нужно)
+------------------------------------------ */
+.hero {
+  text-align: center;
+  padding: 80px 20px;
+  background: linear-gradient(135deg, #ffe6f2, #fff0f6);
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(255, 182, 193, 0.3);
+  margin-bottom: 40px;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.3s ease;
+}
+
+.hero:hover {
+  transform: translateY(-5px);
+}
+
+.hero h1 {
+  font-size: 3em;
+  color: #e60073;
+  margin-bottom: 20px;
+  position: relative;
+  z-index: 1;
+}
+
+.hero p {
+  font-size: 1.2em;
+  margin-bottom: 30px;
+  position: relative;
+  z-index: 1;
+}
+
+/* Пузыри внутри hero (можно убрать) */
+.hero::before,
+.hero::after {
+  content: "";
+  position: absolute;
+  border-radius: 50%;
+  z-index: 0;
+  opacity: 0.2;
+  pointer-events: none;
+}
+
+/* Пузырь в hero (сверху справа) */
+.hero::before {
+  top: -50px;
+  right: -50px;
+  width: 200px;
+  height: 200px;
+  background: #ff66b2;
+}
+
+/* Пузырь в hero (слева в середине) */
+.hero::after {
+  left: -60px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 180px;
+  height: 180px;
+  background: #ffb3d9;
+}
+
+/* ---------------------------------------
+   Кнопки (класс .btn)
+------------------------------------------ */
+.btn {
+  display: inline-block;
+  padding: 12px 25px;
+  background: #ff66b2;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 30px;
+  font-weight: 600;
+  transition: background 0.3s ease, transform 0.3s ease;
+  position: relative;
+  z-index: 1;
+}
+
+.btn:hover {
+  background: #e60073;
+  transform: scale(1.05);
+}
+
+/* ---------------------------------------
+   Горизонтальная прокрутка (карусель)
+------------------------------------------ */
+
+/* Контейнер для секции уровней (горизонтальный скролл) */
+.levels-horizontal {
+  position: relative;
+  margin: 0 auto;
+  max-width: 1200px;
+  padding: 40px 20px;
+  border-radius: 20px;
+  box-shadow: 0 4px 8px rgba(255, 182, 193, 0.3);
+  background: #fff0f6;
+  overflow: hidden; /* скрываем прокрутку */
+}
+
+.levels-horizontal h1 {
+  margin-bottom: 20px;
+  text-align: center;
+  color: #e60073;
+  position: relative;
+  z-index: 1;
+}
+
+/* --- КНОПКИ-СТРЕЛКИ --- */
+.arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: #fff;
+  color: #e60073;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 1.5em;
+  z-index: 2;
+  opacity: 0.9;
+  transition: background 0.3s ease, transform 0.3s ease;
+}
+
+.arrow svg {
+  width: 24px;
+  height: 24px;
+}
+
+.arrow:hover {
+  background: #ffb3d9;
+  transform: translateY(-50%) scale(1.1);
+}
+
+.arrow.left {
+  left: 10px;
+}
+.arrow.right {
+  right: 10px;
+}
+
+/* --- ТРЕК С КАРТОЧКАМИ --- */
+.levels-track {
+  display: flex;
+  gap: 20px;              /* промежуток между карточками */
+  transition: transform 0.5s ease; /* плавный сдвиг при переключении */
+}
+
+/* --- БАЗОВЫЕ СТИЛИ КАРТОЧКИ --- */
+.level {
+  flex: 0 0 300px;        /* фиксированная ширина карточки */
+  background: #fff;
+  border-radius: 15px;
+  padding: 25px;
+  box-shadow: 0 2px 6px rgba(255, 182, 193, 0.3);
+  border: 2px solid transparent;
+  /* Градиентная рамка */
+  background:
+    linear-gradient(#fff, #fff) padding-box,
+    linear-gradient(to right, #ffb3d9, #ff66b2) border-box;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, opacity 0.3s ease;
+  animation: fadeInUp 0.5s ease forwards;
+  opacity: 0; /* для анимации появления */
+}
+
+/* Изображение в карточке */
+.level img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 10px;
+  margin-bottom: 15px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.level h2 {
+  margin: 15px 0 10px;
+  font-weight: 600;
+  color: #e60073;
+}
+
+.level p {
+  margin-bottom: 20px;
+}
+
+/* --- СОСТОЯНИЯ (активная, левая, правая) --- */
+
+/* Активная карточка: крупнее, ярче */
+.level.active {
+  opacity: 1;               /* полная непрозрачность */
+  transform: scale(1.15);   /* увеличиваем размер */
+  box-shadow: 0 6px 12px rgba(255, 182, 193, 0.5);
+  z-index: 2;               /* над остальными */
+}
+
+/* Соседние карточки (левее и правее активной) */
+.level.side-left,
+.level.side-right {
+  opacity: 0.6;
+  transform: scale(0.9);
+  z-index: 1;
+}
+
+/* Все остальные, «далёкие» карточки */
+.level:not(.active):not(.side-left):not(.side-right) {
+  opacity: 0.3;
+  transform: scale(0.8);
+  z-index: 0;
+}
+
+/* --- АНИМАЦИЯ ПОЛЯВЛЕНИЯ --- */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* --- АДАПТИВНОСТЬ --- */
+@media (max-width: 768px) {
+  .levels-horizontal {
+    padding: 20px;
+  }
+  .arrow.left {
+    left: 5px;
+  }
+  .arrow.right {
+    right: 5px;
+  }
+  .level {
+    flex: 0 0 250px; /* уменьшаем карточки */
+  }
+}
