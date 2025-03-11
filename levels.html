@@ -20,77 +20,68 @@
     </header>
 
     <main>
-      <section class="levels-horizontal">
+      <section class="carousel-section">
         <h1>Выберите уровень экспозиции</h1>
 
-        <!-- Левая стрелка -->
-        <div class="arrow left">
-          <!-- SVG-иконка «стрелка влево» -->
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-               stroke-linecap="round" stroke-linejoin="round">
-            <path d="M15 18l-6-6 6-6" />
-          </svg>
+        <!-- Контейнер карусели (задаём max-width и позиционируем стрелки) -->
+        <div class="carousel-container">
+          <!-- Левая стрелка -->
+          <div class="arrow arrow-left">
+            <!-- Можно вставить SVG-иконку -->
+            <span>&#10094;</span>
+          </div>
+          <!-- Правая стрелка -->
+          <div class="arrow arrow-right">
+            <span>&#10095;</span>
+          </div>
+
+          <!-- Трек (лента) с карточками -->
+          <div class="carousel-track">
+            <!-- Пример 7 карточек уровней -->
+            <div class="carousel-item">
+              <img src="assets/level1-thumb.jpg" alt="Уровень 1">
+              <h2>Уровень 1</h2>
+              <p>Небольшая высота, легкий старт.</p>
+              <a href="#" class="btn">Выбрать</a>
+            </div>
+            <div class="carousel-item">
+              <img src="assets/level2-thumb.jpg" alt="Уровень 2">
+              <h2>Уровень 2</h2>
+              <p>Средняя высота, усиление прогресса.</p>
+              <a href="#" class="btn">Выбрать</a>
+            </div>
+            <div class="carousel-item">
+              <img src="assets/level3-thumb.jpg" alt="Уровень 3">
+              <h2>Уровень 3</h2>
+              <p>Высокая точка, максимальное воздействие.</p>
+              <a href="#" class="btn">Выбрать</a>
+            </div>
+            <div class="carousel-item">
+              <img src="assets/level4-thumb.jpg" alt="Уровень 4">
+              <h2>Уровень 4</h2>
+              <p>Описание 4.</p>
+              <a href="#" class="btn">Выбрать</a>
+            </div>
+            <div class="carousel-item">
+              <img src="assets/level5-thumb.jpg" alt="Уровень 5">
+              <h2>Уровень 5</h2>
+              <p>Описание 5.</p>
+              <a href="#" class="btn">Выбрать</a>
+            </div>
+            <div class="carousel-item">
+              <img src="assets/level6-thumb.jpg" alt="Уровень 6">
+              <h2>Уровень 6</h2>
+              <p>Описание 6.</p>
+              <a href="#" class="btn">Выбрать</a>
+            </div>
+            <div class="carousel-item">
+              <img src="assets/level7-thumb.jpg" alt="Уровень 7">
+              <h2>Уровень 7</h2>
+              <p>Средняя высота, усиление прогресса.</p>
+              <a href="#" class="btn">Выбрать</a>
+            </div>
+          </div>
         </div>
-
-        <!-- Правая стрелка -->
-        <div class="arrow right">
-          <!-- SVG-иконка «стрелка вправо» -->
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-               stroke-linecap="round" stroke-linejoin="round">
-            <path d="M9 18l6-6-6-6" />
-          </svg>
-        </div>
-
-        <!-- Трек с карточками -->
-        <div class="levels-track">
-          <div class="level">
-            <img src="assets/level1-thumb.jpg" alt="Уровень 1">
-            <h2>Уровень 1</h2>
-            <p>Небольшая высота, легкий старт.</p>
-            <a href="panorama.html?level=1" class="btn">Выбрать</a>
-          </div>
-
-          <div class="level">
-            <img src="assets/level2-thumb.jpg" alt="Уровень 2">
-            <h2>Уровень 2</h2>
-            <p>Средняя высота, усиление прогресса.</p>
-            <a href="panorama.html?level=2" class="btn">Выбрать</a>
-          </div>
-
-          <div class="level">
-            <img src="assets/level3-thumb.jpg" alt="Уровень 3">
-            <h2>Уровень 3</h2>
-            <p>Высокая точка, максимальное воздействие.</p>
-            <a href="panorama.html?level=3" class="btn">Выбрать</a>
-          </div>
-          
-          <div class="level">
-            <img src="assets/level2-thumb.jpg" alt="Уровень 2">
-            <h2>Уровень 4</h2>
-            <p>Средняя высота, усиление прогресса.</p>
-            <a href="panorama.html?level=2" class="btn">Выбрать</a>
-          </div>
-          
-          <div class="level">
-            <img src="assets/level2-thumb.jpg" alt="Уровень 2">
-            <h2>Уровень 5</h2>
-            <p>Средняя высота, усиление прогресса.</p>
-            <a href="panorama.html?level=2" class="btn">Выбрать</a>
-          </div>
-          
-          <div class="level">
-            <img src="assets/level2-thumb.jpg" alt="Уровень 2">
-            <h2>Уровень 6</h2>
-            <p>Средняя высота, усиление прогресса.</p>
-            <a href="panorama.html?level=2" class="btn">Выбрать</a>
-          </div>
-          
-          <div class="level">
-            <img src="assets/level2-thumb.jpg" alt="Уровень 2">
-            <h2>Уровень 7</h2>
-            <p>Средняя высота, усиление прогресса.</p>
-            <a href="panorama.html?level=2" class="btn">Выбрать</a>
-          </div>
       </section>
     </main>
 
@@ -98,8 +89,7 @@
       <p>&copy; 2025 VR Therapy App. Все права защищены.</p>
     </footer>
 
-    <!-- Скрипт управления каруселью -->
+    <!-- Скрипт для карусели -->
     <script src="js/carousel.js"></script>
-
   </body>
 </html>

@@ -1,5 +1,5 @@
 /* ---------------------------------------
-   Подключаем современный шрифт Montserrat
+   Подключаем шрифт Montserrat (пример)
 ------------------------------------------ */
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600&display=swap');
 
@@ -14,40 +14,39 @@ html, body {
 ------------------------------------------ */
 body {
   font-family: 'Montserrat', sans-serif;
-  background: #fff0f6; /* Очень светлый розовый */
+  background: #F4F1EA; /* Бежевый фон */
   color: #333;
   line-height: 1.6;
   position: relative;
-  overflow-x: hidden; /* Чтобы пузыри не создавали горизонтальную прокрутку */
-  transition: background 0.3s ease;
+  overflow-x: hidden; /* Чтобы пузыри не вызывали горизонтальную прокрутку */
 }
 
-/* Пузыри на фоне body */
+/* Декоративные пузыри на фоне body */
 body::before,
 body::after {
   content: "";
   position: absolute;
   border-radius: 50%;
-  z-index: -1; /* помещаем за основным контентом */
+  z-index: -1;
 }
 
-/* Первый пузырь (сверху слева) */
+/* Первый пузырь (сверху слева) – светлая лаванда */
 body::before {
   top: -100px;
   left: -100px;
   width: 400px;
   height: 400px;
-  background: #ffb3d9;
+  background: #C8B6DC;
   opacity: 0.5;
 }
 
-/* Второй пузырь (снизу справа) */
+/* Второй пузырь (снизу справа) – пастельно-розовый */
 body::after {
   bottom: -100px;
   right: -100px;
   width: 300px;
   height: 300px;
-  background: #ff66b2;
+  background: #E8B2C0;
   opacity: 0.3;
 }
 
@@ -55,12 +54,10 @@ body::after {
    Шапка (header)
 ------------------------------------------ */
 header {
-  background: linear-gradient(90deg, #ff66b2, #ff99cc);
+  background: linear-gradient(90deg, #9174BD, #B9A0D6); /* Лавандовый градиент */
   color: #fff;
   padding: 15px 20px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  position: relative;
-  z-index: 100;
 }
 
 header nav ul {
@@ -83,7 +80,7 @@ header nav ul li a {
 }
 
 header nav ul li a:hover {
-  color: #ffe6f2;
+  color: #F4F1EA;
   transform: scale(1.05);
 }
 
@@ -91,7 +88,7 @@ header nav ul li a:hover {
    Подвал (footer)
 ------------------------------------------ */
 footer {
-  background: #ff66b2;
+  background: #9174BD; /* Тёмно-лавандовый */
   color: #fff;
   text-align: center;
   padding: 15px 20px;
@@ -106,19 +103,18 @@ footer {
 ------------------------------------------ */
 main {
   padding: 40px 20px;
-  /* Чтобы контент не прятался под футером */
-  padding-bottom: 100px;
+  padding-bottom: 100px; /* отступ, чтобы контент не скрывался за футером */
 }
 
 /* ---------------------------------------
-   Пример Hero-секции (можно убрать, если не нужно)
+   Hero-секция (на главной, при необходимости)
 ------------------------------------------ */
 .hero {
   text-align: center;
   padding: 80px 20px;
-  background: linear-gradient(135deg, #ffe6f2, #fff0f6);
+  background: linear-gradient(135deg, #F4F1EA, #DCD2E8);
   border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(255, 182, 193, 0.3);
+  box-shadow: 0 4px 8px rgba(185, 160, 214, 0.3);
   margin-bottom: 40px;
   position: relative;
   overflow: hidden;
@@ -131,7 +127,7 @@ main {
 
 .hero h1 {
   font-size: 3em;
-  color: #e60073;
+  color: #9174BD;
   margin-bottom: 20px;
   position: relative;
   z-index: 1;
@@ -142,9 +138,10 @@ main {
   margin-bottom: 30px;
   position: relative;
   z-index: 1;
+  color: #333;
 }
 
-/* Пузыри внутри hero (можно убрать) */
+/* Дополнительные пузыри в hero */
 .hero::before,
 .hero::after {
   content: "";
@@ -155,23 +152,20 @@ main {
   pointer-events: none;
 }
 
-/* Пузырь в hero (сверху справа) */
 .hero::before {
   top: -50px;
   right: -50px;
   width: 200px;
   height: 200px;
-  background: #ff66b2;
+  background: #B9A0D6;
 }
-
-/* Пузырь в hero (слева в середине) */
 .hero::after {
   left: -60px;
   top: 50%;
   transform: translateY(-50%);
   width: 180px;
   height: 180px;
-  background: #ffb3d9;
+  background: #E8B2C0;
 }
 
 /* ---------------------------------------
@@ -180,7 +174,7 @@ main {
 .btn {
   display: inline-block;
   padding: 12px 25px;
-  background: #ff66b2;
+  background: #9174BD;
   color: #fff;
   text-decoration: none;
   border-radius: 30px;
@@ -191,146 +185,72 @@ main {
 }
 
 .btn:hover {
-  background: #e60073;
+  background: #B9A0D6;
   transform: scale(1.05);
 }
 
 /* ---------------------------------------
-   Горизонтальная прокрутка (карусель)
+   Блок "Преимущества" (benefits), если нужно
 ------------------------------------------ */
-
-/* Контейнер для секции уровней (горизонтальный скролл) */
-.levels-horizontal {
-  position: relative;
-  margin: 0 auto;
-  max-width: 1200px;
-  padding: 40px 20px;
-  border-radius: 20px;
-  box-shadow: 0 4px 8px rgba(255, 182, 193, 0.3);
-  background: #fff0f6;
-  overflow: hidden; /* скрываем прокрутку */
-}
-
-.levels-horizontal h1 {
-  margin-bottom: 20px;
+.benefits {
   text-align: center;
-  color: #e60073;
-  position: relative;
-  z-index: 1;
+  margin-top: 60px;
 }
 
-/* --- КНОПКИ-СТРЕЛКИ --- */
-.arrow {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  background: #fff;
-  color: #e60073;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+.benefits h2 {
+  font-size: 2em;
+  color: #9174BD;
+  margin-bottom: 40px;
+}
+
+.benefits-grid {
   display: flex;
-  align-items: center;
+  flex-wrap: wrap;
   justify-content: center;
-  cursor: pointer;
-  font-size: 1.5em;
-  z-index: 2;
-  opacity: 0.9;
-  transition: background 0.3s ease, transform 0.3s ease;
+  gap: 30px;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
-.arrow svg {
-  width: 24px;
-  height: 24px;
-}
-
-.arrow:hover {
-  background: #ffb3d9;
-  transform: translateY(-50%) scale(1.1);
-}
-
-.arrow.left {
-  left: 10px;
-}
-.arrow.right {
-  right: 10px;
-}
-
-/* --- ТРЕК С КАРТОЧКАМИ --- */
-.levels-track {
-  display: flex;
-  gap: 20px;              /* промежуток между карточками */
-  transition: transform 0.5s ease; /* плавный сдвиг при переключении */
-}
-
-/* --- БАЗОВЫЕ СТИЛИ КАРТОЧКИ --- */
-.level {
-  flex: 0 0 300px;        /* фиксированная ширина карточки */
+.benefit {
   background: #fff;
   border-radius: 15px;
-  padding: 25px;
-  box-shadow: 0 2px 6px rgba(255, 182, 193, 0.3);
-  border: 2px solid transparent;
-  /* Градиентная рамка */
-  background:
-    linear-gradient(#fff, #fff) padding-box,
-    linear-gradient(to right, #ffb3d9, #ff66b2) border-box;
-  transition: transform 0.3s ease, box-shadow 0.3s ease, opacity 0.3s ease;
-  animation: fadeInUp 0.5s ease forwards;
-  opacity: 0; /* для анимации появления */
+  width: 300px;
+  padding: 30px 20px;
+  box-shadow: 0 2px 6px rgba(185, 160, 214, 0.3);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  animation: fadeInUp 0.6s ease forwards;
+  opacity: 0; /* для анимации */
 }
 
-/* Изображение в карточке */
-.level img {
-  display: block;
-  width: 100%;
-  height: auto;
-  border-radius: 10px;
-  margin-bottom: 15px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+.benefit:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 12px rgba(185, 160, 214, 0.5);
 }
 
-.level h2 {
-  margin: 15px 0 10px;
-  font-weight: 600;
-  color: #e60073;
-}
-
-.level p {
+.benefit img {
+  width: 60px;
+  height: 60px;
   margin-bottom: 20px;
 }
 
-/* --- СОСТОЯНИЯ (активная, левая, правая) --- */
-
-/* Активная карточка: крупнее, ярче */
-.level.active {
-  opacity: 1;               /* полная непрозрачность */
-  transform: scale(1.15);   /* увеличиваем размер */
-  box-shadow: 0 6px 12px rgba(255, 182, 193, 0.5);
-  z-index: 2;               /* над остальными */
+.benefit h3 {
+  font-size: 1.2em;
+  margin-bottom: 10px;
+  color: #9174BD;
+  font-weight: 600;
 }
 
-/* Соседние карточки (левее и правее активной) */
-.level.side-left,
-.level.side-right {
-  opacity: 0.6;
-  transform: scale(0.9);
-  z-index: 1;
+.benefit p {
+  font-size: 0.95em;
+  color: #555;
 }
 
-/* Все остальные, «далёкие» карточки */
-.level:not(.active):not(.side-left):not(.side-right) {
-  opacity: 0.3;
-  transform: scale(0.8);
-  z-index: 0;
-}
-
-/* --- АНИМАЦИЯ ПОЛЯВЛЕНИЯ --- */
+/* Анимация появления (общая) */
 @keyframes fadeInUp {
   from {
     opacity: 0;
-    transform: translateY(20px);
+    transform: translateY(30px);
   }
   to {
     opacity: 1;
@@ -338,18 +258,224 @@ main {
   }
 }
 
-/* --- АДАПТИВНОСТЬ --- */
+/* ---------------------------------------
+   Страница "Как это работает"
+------------------------------------------ */
+/* Мини-Hero для "Как это работает" */
+.how-hero {
+  background: linear-gradient(135deg, #DCD2E8, #F4F1EA);
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(185, 160, 214, 0.3);
+  padding: 60px 20px;
+  margin-bottom: 40px;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.3s ease;
+}
+
+.how-hero:hover {
+  transform: translateY(-5px);
+}
+
+.how-hero-content {
+  max-width: 800px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.how-hero-content h1 {
+  font-size: 2.5em;
+  color: #9174BD;
+  margin-bottom: 20px;
+}
+
+.how-hero-content p {
+  font-size: 1.1em;
+  color: #333;
+  line-height: 1.6;
+}
+
+/* Блок с основными этапами (шаги) */
+.how-steps {
+  text-align: center;
+  margin-bottom: 60px;
+}
+
+.how-steps h2 {
+  font-size: 2em;
+  color: #9174BD;
+  margin-bottom: 30px;
+}
+
+.steps-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 30px;
+  justify-content: center;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Каждая карточка-этап (step) */
+.step {
+  background: #fff;
+  border-radius: 15px;
+  width: 300px;
+  padding: 25px;
+  box-shadow: 0 2px 6px rgba(185, 160, 214, 0.3);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  animation: fadeInUp 0.6s ease forwards;
+  opacity: 0; /* для анимации */
+}
+
+.step:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 12px rgba(185, 160, 214, 0.5);
+}
+
+.step img {
+  width: 60px;
+  height: 60px;
+  margin-bottom: 15px;
+}
+
+.step h3 {
+  font-size: 1.2em;
+  margin-bottom: 10px;
+  color: #9174BD;
+  font-weight: 600;
+}
+
+.step p {
+  font-size: 0.95em;
+  color: #555;
+}
+
+/* ---------------------------------------
+   НОВАЯ КАРУСЕЛЬ (carousel-section)
+------------------------------------------ */
+.carousel-section {
+  margin-top: 40px;
+  text-align: center;
+}
+
+.carousel-section h1 {
+  margin-bottom: 20px;
+  font-size: 1.8em;
+  color: #9174BD;
+}
+
+/* Контейнер карусели */
+.carousel-container {
+  position: relative;
+  max-width: 900px; /* Можно менять под нужную ширину */
+  margin: 0 auto;
+  overflow: hidden; /* Скрываем выход карточек за границы */
+  padding: 20px 0;  /* вертикальные отступы */
+}
+
+/* Трек (лента) */
+.carousel-track {
+  display: flex;
+  transition: transform 0.5s ease;
+}
+
+/* Каждая карточка (carousel-item) */
+.carousel-item {
+  flex: 0 0 260px;   /* Ширина карточки */
+  margin-right: 20px; /* Отступ между карточками */
+  background: #fff;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 2px 6px rgba(185, 160, 214, 0.3);
+  text-align: center;
+}
+
+.carousel-item:last-child {
+  margin-right: 0; /* Последняя без отступа */
+}
+
+.carousel-item img {
+  display: block;
+  width: 100%;
+  height: auto;
+  margin-bottom: 10px;
+  border-radius: 5px;
+}
+
+/* Стрелки */
+.arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: #fff;
+  color: #9174BD;
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 1.2em;
+  z-index: 2;
+  transition: background 0.3s ease, transform 0.3s ease;
+}
+
+/* Расположение стрелок за пределами контейнера */
+.arrow-left {
+  left: -50px;
+}
+.arrow-right {
+  right: -50px;
+}
+
+.arrow:hover {
+  background: #C8B6DC; /* светло-лавандовый */
+  transform: translateY(-50%) scale(1.1);
+}
+
+/* ---------------------------------------
+   Адаптивность
+------------------------------------------ */
 @media (max-width: 768px) {
-  .levels-horizontal {
-    padding: 20px;
+  header nav ul {
+    flex-direction: column;
   }
-  .arrow.left {
+  header nav ul li {
+    margin: 5px 0;
+  }
+
+  .hero h1 {
+    font-size: 2.2em;
+  }
+
+  .carousel-container {
+    max-width: 100%;
+    padding: 10px 0;
+  }
+  .arrow-left {
     left: 5px;
   }
-  .arrow.right {
+  .arrow-right {
     right: 5px;
   }
-  .level {
-    flex: 0 0 250px; /* уменьшаем карточки */
+  .carousel-item {
+    flex: 0 0 200px;
+    margin-right: 10px;
+  }
+  .how-hero {
+    padding: 40px 20px;
+  }
+  .how-hero-content h1 {
+    font-size: 2em;
+  }
+  .steps-grid {
+    flex-direction: column;
+    align-items: center;
+  }
+  .step {
+    width: 80%;
   }
 }
