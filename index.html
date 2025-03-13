@@ -24,8 +24,8 @@
       <section class="hero">
         <h1>VR Therapy App</h1>
         <p>Преодолейте страх высоты с помощью виртуальной терапии.</p>
-        <a href="levels.html" class="btn">Начать терапию</a>
-      </section>
+        <button id="startTherapyBtn" class="btn">Начать терапию</button>
+      </section>      
 
       <!-- Блок с преимуществами (или «Почему это работает») -->
       <section class="benefits">
@@ -54,5 +54,46 @@
     <footer>
       <p>&copy; 2025 VR Therapy App. Все права защищены.</p>
     </footer>
+
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        // Смотрим, есть ли в localStorage токен
+        const token = localStorage.getItem('token');
+
+        // Получаем ссылки Вход/Выход
+        const loginLink = document.getElementById('loginLink');
+        const logoutLink = document.getElementById('logoutLink');
+
+        // Если токен есть -> скрываем "Вход", показываем "Выход"
+        // Иначе наоборот
+        if (token) {
+          loginLink.style.display = 'none';
+          logoutLink.style.display = 'inline-block';
+        } else {
+          loginLink.style.display = 'inline-block';
+          logoutLink.style.display = 'none';
+        }
+
+        // Нажатие на "Выход" - стираем токен, перегружаем страницу
+        logoutLink.addEventListener('click', (e) => {
+          e.preventDefault();
+          localStorage.removeItem('token');
+          window.location.reload();
+        });
+
+        // Логика для кнопки "Начать терапию"
+        const startBtn = document.getElementById('startTherapyBtn');
+        startBtn.addEventListener('click', () => {
+          if (token) {
+            // Если пользователь авторизован, отправляем на levels.html
+            window.location.href = 'levels.html';
+          } else {
+            // Иначе предупреждаем и отправляем на login
+            alert('Пожалуйста, войдите, чтобы начать терапию');
+            window.location.href = 'login.html';
+          }
+        });
+      });
+    </script>
   </body>
 </html>
