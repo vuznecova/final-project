@@ -1,32 +1,47 @@
 <!DOCTYPE html>
-<html lang="ru">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Регистрация</title>
-    <link rel="stylesheet" href="css/style.css" />
-  </head>
-  <body>
-    <h1>Регистрация</h1>
-    <div class="auth-container">
-      <label for="regEmail">Email:</label>
-      <input type="email" id="regEmail" placeholder="Введите email" />
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Register — VR Therapy App</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <!-- Навигация -->
+  <header class="site-header">
+    <nav>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="how-it-works.html">How it works</a></li>
+        <li><a href="levels.html">Levels</a></li>
+        <li><a href="progress.html">Progress</a></li>
+        <li><a href="about.html">About us</a></li>
+        <li><a href="login.html" class="btn-nav btn-nav--primary">Log in</a></li>
+      </ul>
+    </nav>
+  </header>
 
-      <label for="regPassword">Пароль:</label>
-      <input type="password" id="regPassword" placeholder="Введите пароль" />
-
-      <button id="registerBtn">Зарегистрироваться</button>
-
-      <p>Уже есть аккаунт? <a href="login.html">Войти</a></p>
+  <!-- Основной контент -->
+  <main class="page page--auth">
+    <div class="auth-card">
+      <h1 class="auth-title">Please login!</h1>
+      <div class="field">
+        <span>Email</span>
+        <input type="email" name="email" required>
+      </div>
+      <div class="field">
+        <span>Password</span>
+        <input type="password" name="password" required>
+      </div>
+      <button class="btn--auth">Sign Up</button>
+      <p class="auth-footer">
+        Already have an account?
+        <a href="login.html">Log in</a>
+      </p>
     </div>
+  </main>
 
-    <script src="js/auth.js"></script>
-    <script>
-      // При загрузке страницы, вешаем обработчик на кнопку
-      document.addEventListener('DOMContentLoaded', () => {
-        const registerBtn = document.getElementById('registerBtn');
-        registerBtn.addEventListener('click', handleRegister);
-      });
-    </script>
-  </body>
+  <!-- Подключение скрипта авторизации -->
+  <script src="js/auth.js"></script>
+</body>
 </html>

@@ -1,153 +1,266 @@
-/* ---------------------------------------
-   Подключаем шрифт Montserrat (пример)
------------------------------------------- */
+/* ==========================================================================
+   1. IMPORTS & VARIABLES
+   ========================================================================== */
+
+/* Import Montserrat font from Google Fonts */
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600&display=swap");
 
-/* Сброс базовых отступов */
-html,
-body {
-  overflow-x: hidden;
-  margin: 0;
-  padding: 0;
+/* (Optional) CSS custom properties for colors and sizing */
+:root {
+  /* Background */
+  --bg-light:      #f4f1ea;    /* нежный бежевый фон */
+
+  /* New accents from your icons */
+  --accent:        #2FBBC2;    
+  --accent-dark:   #056A71;    
+  --accent-alt:    #E78BA8;  
+  --accent-warn:   #EA4C2C;   
+
+  /* Text & borders */
+  --text-dark:     #333;
+  --text-light:    #666;
+  --border-light:  #ddd;
+
+  /* Layout */
+  --header-height: 64px;
+  --footer-height: 60px;
+
+  /* Bubbles background (если используете pattern) */
+  --bubbles-pattern: url('../assets/bubbles.png');
 }
 
-/* ---------------------------------------
-   Общие стили для всего сайта
------------------------------------------- */
+/* ==========================================================================
+   2. RESET
+   ========================================================================== */
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+}
+
+/* ==========================================================================
+   3. GLOBAL BASE STYLES
+   ========================================================================== */
+
 body {
   font-family: "Montserrat", sans-serif;
-  background: #f4f1ea; /* мягкий бежевый фон */
-  color: #333;
+  background-color: var(--bg-light);
+  color: var(--text-dark);
   line-height: 1.6;
   position: relative;
   overflow-x: hidden;
 }
 
-/* Декоративные элементы – «пузыри» на фоне */
-body::before,
-body::after {
-  content: "";
-  position: absolute;
-  border-radius: 50%;
-  z-index: -1;
-}
-body::before {
-  top: -100px;
-  left: -100px;
-  width: 400px;
-  height: 400px;
-  background: #C8B6DC;
-  opacity: 0.5;
-}
-body::after {
-  bottom: -100px;
-  right: -100px;
-  width: 300px;
-  height: 300px;
-  background: #E8B2C0;
-  opacity: 0.3;
-}
+/* ==========================================================================
+   4. BACKGROUND DECORATIONS
+   ========================================================================== */
 
-/* ---------------------------------------
-   Шапка (header)
------------------------------------------- */
-header {
-  background: linear-gradient(90deg, #9174bd, #b9a0d6);
-  color: #fff;
-  padding: 15px 20px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-header nav ul {
+   body::before {
+    content: "";
+    position: absolute;
+    border-radius: 50%;
+    z-index: -1; /* Change from 0 to -1 */
+    top: -100px;
+    left: -100px;
+    width: 400px;
+    height: 400px;
+    background: var(--accent-alt);
+    opacity: 0.5;
+  }
+  
+  /* Also adjust the body::after element (orange bubble) */
+  body::after {
+    content: "";
+    position: absolute;
+    border-radius: 50%;
+    z-index: -1; /* Change from 0 to -1 */
+    bottom: -100px;
+    right: -100px;
+    width: 300px;
+    height: 300px;
+    background: var(--accent-warn);
+    opacity: 0.3;
+  }
+
+/* ==========================================================================
+   5. HEADER & NAVIGATION
+   ========================================================================== */
+
+   header {
+    background: linear-gradient(90deg, var(--accent), var(--accent-dark));
+    color: #fff;
+    padding: 15px 20px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    position: relative; /* Add this */
+    z-index: 10; /* Increase from 1 to 10 */
+  }
+
+.nav-list {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
   list-style: none;
   margin: 0;
   padding: 0;
-  display: flex;
-  justify-content: center;
 }
+
+header nav ul {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
 header nav ul li {
   margin: 0 15px;
 }
+
 header nav ul li a {
+  font-family: "Montserrat", sans-serif; /* Убедимся, что используется тот же шрифт */
+  font-size: 0.95rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
   color: #fff;
-  text-decoration: none;
-  font-weight: 600;
+  text-decoration: none; /* Убираем подчеркивание */
+  font-weight: 600; /* Делаем текст полужирным вместо подчеркивания */
   transition: color 0.3s ease, transform 0.3s ease;
 }
+
 header nav ul li a:hover {
-  color: #f4f1ea;
+  color: var(--bg-light);
+  transform: scale(1.05); /* Небольшой эффект при наведении */
+}
+
+.nav-list li {
+  margin: 0 15px;
+}
+
+.nav-list li a {
+  text-decoration: none;
+  color: #fff;
+  font-weight: 600;
+  transition: color .3s ease, transform .3s ease;
+}
+
+.nav-list li a:hover {
+  color: var(--bg-light);
   transform: scale(1.05);
 }
 
-/* ---------------------------------------
-   Подвал (footer)
------------------------------------------- */
+/* Auth buttons in header */
+.btn-nav {
+  padding: 6px 14px;
+  border-radius: 20px;
+  border: 2px solid var(--accent-dark);
+  color: var(--accent-dark);
+  background: transparent;
+  text-decoration: none;
+  font-weight: 500;
+  transition: background .2s, color .2s;
+}
+
+.btn-nav:hover {
+  background-color: var(--accent-dark);
+  color: #fff;
+}
+
+.btn-nav--primary {
+  background-color: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+
+.btn-nav--primary:hover {
+  background-color: var(--accent-dark);
+}
+
+/* ==========================================================================
+   6. FOOTER
+   ========================================================================== */
+
 footer {
-  background: #9174bd;
+  background-color: var(--accent);
   color: #fff;
   text-align: center;
   padding: 15px 20px;
   position: fixed;
   bottom: 0;
   width: 100%;
-  box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 -2px 4px rgba(0,0,0,0.1);
 }
 
-/* ---------------------------------------
-   Основная часть (main)
------------------------------------------- */
+/* ==========================================================================
+   7. MAIN LAYOUT
+   ========================================================================== */
+
 main {
   padding: 40px 20px;
-  padding-bottom: 100px; /* чтобы контент не скрывался под футером */
+  padding-bottom: calc(var(--footer-height) + 40px);
 }
 
-/* ---------------------------------------
-   Hero-секция (Главная страница)
------------------------------------------- */
+/* ==========================================================================
+   8. HERO SECTION
+   ========================================================================== */
+
 .hero {
+  position: relative;
+  overflow: hidden;
+  z-index: 5;
   text-align: center;
   padding: 80px 20px;
-  background: linear-gradient(135deg, #F4F1EA, #DCD2E8);
+  background: linear-gradient(
+    135deg,
+    var(--bg-light),         /* your beige */
+    #C2F0E3 70%,             /* mint at 70% */
+    #FFE4D9                   /* peach at 100% */
+  );
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(185,160,214,0.3);
   margin-bottom: 40px;
-  position: relative;
-  overflow: hidden;
-  transition: transform 0.3s ease;
+  transition: transform .3s ease;
 }
+
 .hero:hover {
   transform: translateY(-5px);
 }
+
 .hero h1 {
   font-size: 3em;
-  color: #9174BD;
+  color: var(--accent);
   margin-bottom: 20px;
   position: relative;
-  z-index: 1;
 }
+
 .hero p {
   font-size: 1.2em;
+  color: var(--text-dark);
   margin-bottom: 30px;
   position: relative;
   z-index: 1;
-  color: #333;
 }
-/* Дополнительные пузыри внутри hero (необязательно) */
+
+/* Decorative small bubbles inside hero */
 .hero::before,
 .hero::after {
   content: "";
   position: absolute;
   border-radius: 50%;
-  z-index: 0;
   opacity: 0.2;
   pointer-events: none;
 }
+
 .hero::before {
   top: -50px;
   right: -50px;
   width: 200px;
   height: 200px;
-  background: #B9A0D6;
+  background: var(--accent-dark);
 }
+
 .hero::after {
   left: -60px;
   top: 50%;
@@ -157,26 +270,32 @@ main {
   background: #E8B2C0;
 }
 
+/* ==========================================================================
+   9. BUTTON STYLES
+   ========================================================================== */
+
 .btn {
-  background: #9174BD; /* Лавандовый */
+  display: inline-block;
+  background-color: var(--accent);
   color: #fff;
   border-radius: 30px;
   padding: 10px 25px;
-  text-decoration: none;
   font-weight: 600;
-  transition: background 0.3s ease, transform 0.3s ease;
-  cursor: pointer; /* важно, чтобы выглядело как кнопка */
-  border: none; /* если это <button>, убираем рамку */
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  transition: background .3s ease, transform .3s ease;
 }
 
 .btn:hover {
-  background: #B9A0D6; /* светлее при наведении */
+  background-color: var(--accent-dark);
   transform: scale(1.05);
 }
 
-/* ---------------------------------------
-   Блок "Преимущества" (benefits), если нужно
------------------------------------------- */
+/* ==========================================================================
+   10. BENEFITS / FEATURES GRID
+   ========================================================================== */
+
 .benefits {
   text-align: center;
   margin-top: 60px;
@@ -184,7 +303,7 @@ main {
 
 .benefits h2 {
   font-size: 2em;
-  color: #9174BD;
+  color: var(--accent);
   margin-bottom: 40px;
 }
 
@@ -202,15 +321,15 @@ main {
   border-radius: 15px;
   width: 300px;
   padding: 30px 20px;
-  box-shadow: 0 2px 6px rgba(185, 160, 214, 0.3);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  animation: fadeInUp 0.6s ease forwards;
-  opacity: 0; /* для анимации */
+  box-shadow: 0 2px 6px rgba(185,160,214,0.3);
+  transition: transform .3s ease, box-shadow .3s ease;
+  opacity: 0;
+  animation: fadeInUp .6s ease forwards;
 }
 
 .benefit:hover {
   transform: translateY(-5px);
-  box-shadow: 0 4px 12px rgba(185, 160, 214, 0.5);
+  box-shadow: 0 4px 12px rgba(185,160,214,0.5);
 }
 
 .benefit img {
@@ -222,174 +341,202 @@ main {
 .benefit h3 {
   font-size: 1.2em;
   margin-bottom: 10px;
-  color: #9174BD;
-  font-weight: 600;
+  color: var(--accent);
 }
 
 .benefit p {
-  font-size: 0.95em;
+  font-size: .95em;
   color: #555;
 }
 
-/* Анимация появления (общая) */
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
+/* ==========================================================================
+   11. HOW-IT-WORKS SECTION
+   ========================================================================== */
 
-/* ---------------------------------------
-   Страница "Как это работает"
------------------------------------------- */
-.how-hero {
-  background: linear-gradient(135deg, #dcd2e8, #f4f1ea);
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(185, 160, 214, 0.3);
-  padding: 60px 20px;
-  margin-bottom: 40px;
-  text-align: center;
-  transition: transform 0.3s ease;
-}
-.how-hero:hover {
-  transform: translateY(-5px);
-}
-.how-hero h1 {
-  font-size: 2.5em;
-  color: #9174bd;
-  margin-bottom: 20px;
-}
-.how-hero p {
-  font-size: 1.1em;
-  color: #333;
-  line-height: 1.6;
-  max-width: 800px;
-  margin: 0 auto;
-}
-
-/* Блок "Основные этапы" на странице "Как это работает" */
 .how-steps {
   text-align: center;
   margin-bottom: 60px;
 }
+
 .how-steps h2 {
   font-size: 2em;
-  color: #9174bd;
+  color: var(--accent);
   margin-bottom: 30px;
 }
+
 .steps-grid {
   display: flex;
   flex-wrap: wrap;
-  gap: 30px;
   justify-content: center;
+  gap: 30px;
   max-width: 1200px;
   margin: 0 auto;
 }
+
 .step {
   background: #fff;
   border-radius: 15px;
   width: 300px;
   padding: 25px;
-  box-shadow: 0 2px 6px rgba(185, 160, 214, 0.3);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 2px 6px rgba(185,160,214,0.3);
   text-align: center;
+  transition: transform .3s ease, box-shadow .3s ease;
 }
+
 .step:hover {
   transform: translateY(-5px);
-  box-shadow: 0 4px 12px rgba(185, 160, 214, 0.5);
+  box-shadow: 0 4px 12px rgba(185,160,214,0.5);
 }
+
 .step img {
   width: 60px;
   height: 60px;
   margin-bottom: 15px;
 }
+
 .step h3 {
   font-size: 1.2em;
   margin-bottom: 10px;
-  color: #9174bd;
-  font-weight: 600;
+  color: var(--accent);
 }
+
 .step p {
-  font-size: 0.95em;
+  font-size: .95em;
   color: #555;
 }
 
-/* ---------------------------------------
-   Галерея уровней (простая сетка)
------------------------------------------- */
-.levels-gallery {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr); /* ровно 3 столбца */
-  gap: 20px;
-  max-width: 1200px;
-  text-align: center;
-  margin: 40px auto;
-  padding: 20px;
-}
-
-.levels-gallery .level {
-  background: #fff;
-  border-radius: 10px;
-  overflow: hidden;
-  box-shadow: 0 2px 6px rgba(185, 160, 214, 0.3);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-.levels-gallery .level:hover {
-  transform: scale(1.03);
-  box-shadow: 0 4px 12px rgba(185, 160, 214, 0.4);
-}
-.levels-gallery .level img {
-  width: 100%;
-  display: block;
-}
+/* ==========================================================================
+   12. LEVELS GALLERY
+   ========================================================================== */
 
 .levels-title {
   text-align: center;
   margin: 40px 0 20px;
   font-size: 2em;
-  color: #9174bd;
-  text-transform: uppercase; /* пример */
-  letter-spacing: 1px; /* расширить межбуквенный интервал */
+  color: var(--accent);
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }
 
-.levels-gallery .level h2 {
-  text-align: center;
-  font-size: 1.5em;
-  color: #9174bd;
-  margin: 15px 0;
+.levels-gallery {
+  display: grid;
+  grid-template-columns: repeat(3,1fr);
+  gap: 20px;
+  max-width: 1200px;
+  margin: 0 auto 40px;
+  padding: 0 20px;
 }
-.levels-gallery .level p {
+
+.level {
+  background: #fff;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 2px 6px rgba(185,160,214,0.3);
+  transition: transform .3s ease, box-shadow .3s ease;
   text-align: center;
+}
+
+.level:hover {
+  transform: scale(1.03);
+  box-shadow: 0 4px 12px rgba(185,160,214,0.4);
+}
+
+.level img {
+  width: 100%;
+  display: block;
+}
+
+.level h2 {
+  margin: 15px 0;
+  font-size: 1.5em;
+  color: var(--accent);
+}
+
+.level p {
   font-size: 1em;
   color: #555;
   margin-bottom: 15px;
 }
 
 .level .btn {
-  display: inline-block;
-  background: #9174bd; /* Тёмно-лавандовый */
-  color: #fff;
-  border-radius: 30px;
-  padding: 8px 20px;
-  text-decoration: none;
-  font-weight: 600;
-  transition: background 0.3s ease, transform 0.3s ease;
+  margin-bottom: 15px;
+}
+
+/* ==========================================================================
+   13. AUTH PAGES (LOGIN & REGISTER)
+   ========================================================================== */
+
+.page--auth {
+  position: relative;
+  background-color: var(--bg-light);
+  padding: calc(var(--header-height) + 60px) 20px 60px;
+  min-height: calc(100vh - var(--header-height) - var(--footer-height));
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.auth-card {
+  background: #fff;
+  padding: 40px 30px;
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.04);
+  max-width: 360px;
+  width: 100%;
   text-align: center;
-  margin-bottom: 15px; /* небольшой отступ снизу */
+  z-index: 1;
 }
 
-.level .btn:hover {
-  background: #b9a0d6; /* Светлее при наведении */
-  transform: scale(1.05);
+.auth-title {
+  margin-bottom: 24px;
+  font-size: 1.75rem;
+  color: var(--accent-dark);
 }
 
-/* ---------------------------------------
-   Анимация появления (общая)
------------------------------------------- */
+.field {
+  margin-bottom: 20px;
+  text-align: left;
+}
+
+.field span {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: 500;
+  color: var(--text-dark);
+}
+
+.field input {
+  width: 100%;
+  padding: 12px 14px;
+  border: 2px solid var(--border-light);
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: border-color .2s;
+}
+
+.field input:focus {
+  border-color: var(--accent);
+  outline: none;
+}
+
+.auth-card .btn {
+  width: 100%;
+}
+
+/* Overlay bubbles behind auth card */
+.page--auth::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--bubbles-pattern);
+  opacity: 0.2;
+  z-index: 0;
+}
+
+/* ==========================================================================
+   14. ANIMATIONS
+   ========================================================================== */
+
 @keyframes fadeInUp {
   from {
     opacity: 0;
@@ -401,25 +548,34 @@ main {
   }
 }
 
-/* ---------------------------------------
-   Адаптивные стили
------------------------------------------- */
+/* ==========================================================================
+   15. RESPONSIIVE BREAKPOINTS
+   ========================================================================== */
+
 @media (max-width: 768px) {
+
   header nav ul {
     flex-direction: column;
+    align-items: center;
   }
   header nav ul li {
-    margin: 5px 0;
+    margin: 8px 0;
+  }
+
+  .hero {
+    padding: 40px 20px;
   }
   .hero h1 {
     font-size: 2.2em;
   }
+
   .how-hero {
     padding: 40px 20px;
   }
   .how-hero h1 {
     font-size: 2em;
   }
+
   .steps-grid {
     flex-direction: column;
     align-items: center;
@@ -427,7 +583,121 @@ main {
   .step {
     width: 80%;
   }
+
   .levels-gallery {
     grid-template-columns: 1fr;
   }
+}
+
+/* ==================================================
+   AUTH FORMS: Login & Register Styling
+   ================================================== */
+
+/* Обёртка страницы аутентификации */
+.page--auth {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 100px 20px 60px;
+  background-color: var(--bg-light);
+}
+
+/* Карточка с формой */
+.auth-card {
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.04);
+  padding: 40px 30px;
+  max-width: 380px;
+  width: 100%;
+  text-align: center;
+  position: relative;
+  z-index: 1;
+}
+
+.auth-card .field input {
+  width: 350px;
+}
+
+/* Заголовок формы */
+.auth-title {
+  font-family: "Montserrat", sans-serif;
+  font-size: 2rem;
+  color: var(--accent-dark);
+  margin-bottom: 24px;
+}
+
+/* Поля формы */
+.field {
+  margin-bottom: 20px;
+  text-align: left;
+}
+.field span {
+  display: block;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--text-dark);
+  margin-bottom: 6px;
+}
+.field input {
+  width: 100%;
+  padding: 12px 14px;
+  font-size: 1rem;
+  color: var(--text-dark);
+  background: #fafafa;
+  border: 2px solid var(--border-light);
+  border-radius: 8px;
+  transition: border-color 0.2s;
+}
+.field input:focus {
+  outline: none;
+  border-color: var(--accent);
+  background: #fff;
+}
+
+/* Кнопка отправки */
+.btn--auth {
+  display: block;
+  width: 100%;
+  margin: 24px 0 12px;
+  padding: 12px;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #fff;
+  background-color: var(--accent);
+  border: none;
+  border-radius: 24px;
+  cursor: pointer;
+  transition: background-color 0.2s, transform 0.1s;
+}
+.btn--auth:hover {
+  background-color: var(--accent-dark);
+  transform: translateY(-1px);
+}
+.btn--auth:active {
+  transform: translateY(0);
+}
+
+/* Нижняя подсказка и ссылка */
+.auth-footer {
+  font-size: 0.9rem;
+  color: var(--text-light);
+}
+.auth-footer a {
+  color: var(--accent-dark);
+  text-decoration: none;
+  font-weight: 500;
+}
+.auth-footer a:hover {
+  text-decoration: underline;
+}
+
+/* Если нужно, можно добавить фоновые „пузыри” под формой */
+.page--auth::before {
+  content: "";
+  position: absolute;
+}
+.page--auth::after {
+  content: "";
+  position: absolute;
 }

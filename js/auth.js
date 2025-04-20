@@ -1,79 +1,70 @@
-// auth.js
+// js/auth.js
+document.addEventListener('DOMContentLoaded', () => {
+  const registerForm = document.getElementById('registerForm');
+  const loginForm    = document.getElementById('loginForm');
 
-// Адрес вашего сервера
-const BASE_URL = 'http://localhost:5000/api/auth';
-
-// Функция регистрации
-async function handleRegister() {
-  const email = document.getElementById('regEmail').value.trim();
-  const password = document.getElementById('regPassword').value.trim();
-
-  if (!email || !password) {
-    alert('Заполните все поля!');
-    return;
-  }
-
-  try {
-    const response = await fetch(`${BASE_URL}/register`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ email, password })
+  if (registerForm) {
+    registerForm.addEventListener('submit', async e => {
+      e.preventDefault();
+      const email    = e.target.email.value;
+      const password = e.target.password.value;
+      const res = await fetch('http://localhost:5000/api/auth/register', {
+        method:  'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body:    JSON.stringify({ email, password })
+      });
+      const data = await res.json();
+      if (res.ok) {
+        alert('Registration successful! Please log in.');
+        window.location.href = 'login.html';
+      } else {
+        alert(data.error);
+      }
     });
-
-    const data = await response.json();
-    
-    if (!response.ok) {
-      // Если статус не 2xx, значит ошибка
-      throw new Error(data.error || 'Ошибка регистрации');
-    }
-
-    alert(data.message || 'Регистрация успешна!');
-    // Перенаправляем на страницу логина
-    window.location.href = 'login.html';
-  } catch (error) {
-    alert('Ошибка: ' + error.message);
-    console.error('Ошибка регистрации:', error);
-  }
-}
-
-// Функция логина
-async function handleLogin() {
-  const email = document.getElementById('loginEmail').value.trim();
-  const password = document.getElementById('loginPassword').value.trim();
-
-  if (!email || !password) {
-    alert('Заполните все поля!');
-    return;
   }
 
-  try {
-    const response = await fetch(`${BASE_URL}/login`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ email, password })
+  if (loginForm) {
+    loginForm.addEventListener('submit', async e => {
+      e.preventDefault();
+      const email    = e.target.email.value;
+      const password = e.target.password.value;
+      const res = await fetch('http://localhost:5000/api/auth/login', {
+        method:  'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body:    JSON.stringify({ email, password })
+      });
+      const data = await res.json();
+      if (res.ok) {
+        // сохраняем токен в localStorage
+        localStorage.setItem('token', data.token);
+        window.location.href = 'index.html';  // перенаправляем на выбор уровня
+      } else {
+        alert(data.error);
+      }
     });
-
-    const data = await response.json();
-
-    if (!response.ok) {
-      throw new Error(data.error || 'Ошибка входа');
-    }
-
-    alert(data.message || 'Вход выполнен успешно');
-
-    // Сохраняем токен (если сервер его присылает)
-    if (data.token) {
-      localStorage.setItem('token', data.token);
-    }
-
-    // Перенаправляем на главную страницу (или levels.html)
-    window.location.href = 'index.html';
-  } catch (error) {
-    alert('Ошибка: ' + error.message);
-    console.error('Ошибка входа:', error);
   }
-}
+
+  // js/auth.js (добавить в конец)
+document.addEventListener('DOMContentLoaded', () => {
+  const navList = document.querySelector('.nav-list');
+  const token = localStorage.getItem('token');
+
+  if (token) {
+    // Заменяем Log In → Log Out
+    const loginLink = navList.querySelector('a[href="login.html"]');
+    if (loginLink) {
+      loginLink.textContent = 'Log Out';
+      loginLink.setAttribute('href', '#');
+      loginLink.addEventListener('click', e => {
+        e.preventDefault();
+        localStorage.removeItem('token');
+        window.location.reload(); // перезагрузим, чтобы вернуть “Log In”
+      });
+    }
+    // скрываем Sign Up, если хотите
+    const signupLink = navList.querySelector('a[href="register.html"]');
+    if (signupLink) signupLink.style.display = 'none';
+  }
+});
+
+});
