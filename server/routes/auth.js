@@ -9,7 +9,7 @@ const JWT_SECRET = process.env.JWT_SECRET;
 
 // Регистрация
 router.post('/register', async (req, res) => {
-  const { email, password } = req.body;
+  const { name, surname, email, password } = req.body;
   try {
     // Проверяем существование
     const [exists] = await db.execute(
@@ -21,8 +21,8 @@ router.post('/register', async (req, res) => {
     // Хешируем пароль и вставляем
     const hashed = await bcrypt.hash(password, 10);
     await db.execute(
-      'INSERT INTO users (email, password) VALUES (?, ?)',
-      [email, hashed]
+      `INSERT INTO users (first_name, last_name, email, password) VALUES (?, ?, ?, ?)`,
+    [name, surname, email, hashed]
     );
     res.status(201).json({ message: 'Registration successful' });
   } catch (err) {
@@ -37,9 +37,8 @@ router.post('/login', async (req, res) => {
   try {
     // Ищем пользователя
     const [rows] = await db.execute(
-      'SELECT id, password FROM users WHERE email = ?',
+      'SELECT id, first_name, last_name, password FROM users WHERE email = ?',
       [email]
-    );
     if (!rows.length) return res.status(400).json({ error: 'Invalid credentials' });
 
     const user = rows[0];
@@ -47,8 +46,10 @@ router.post('/login', async (req, res) => {
     if (!ok) return res.status(400).json({ error: 'Invalid credentials' });
 
     // Отправляем JWT
-    const token = jwt.sign({ userId: user.id }, JWT_SECRET, { expiresIn: '2h' });
-    res.json({ message: 'Login successful', token });
+    const fullName = `${user.first_name} ${user.last_name}`;
+    const token = jwt.sign({ userId: user.id, name: fullName },
+                           process.env.JWT_SECRET, { expiresIn: '1h' });
+    res.json({ token });
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: 'Server error' });
