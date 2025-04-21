@@ -7,23 +7,9 @@
     <link rel="stylesheet" href="css/style.css" />
   </head>
   <body>
-    <header>
-      <nav>
-        <ul class="nav-list">
-          <li><a href="index.html">Home</a></li>
-          <li><a href="how-it-works.html">How it works</a></li>
-          <li><a href="levels.html">Levels</a></li>
-          <li><a href="progress.html">Progress</a></li>
-          <li><a href="about.html">About us</a></li>
-          <li><a id="loginLink" href="login.html" class="btn-nav btn-nav--primary">Log in</a></li>
-          <li><a id="logoutLink" href="#" class="btn-nav btn-nav--primary" style="display:none;">Log out</a></li>
-          <li><a href="register.html" class="btn-nav btn-nav--primary">Sign up</a></li>    
-        </ul>
-      </nav>
-    </header>
+    <div id="header-placeholder"></div>
 
     <main>
-      <!-- Мини-Hero секция для "Как это работает" -->
       <section class="hero">
         <div>
           <h1>Как это работает</h1>
@@ -34,11 +20,9 @@
         </div>
       </section>
 
-      <!-- Основные этапы / Карточки с описанием -->
       <section class="how-steps">
         <h2>Основные этапы</h2>
         <div class="steps-grid">
-          <!-- Шаг 1 -->
           <div class="step">
             <img src="assets/icon1.png" alt="Шаг 1" />  <!-- надо мененять иконки -->
             <h3>Выбор уровня</h3>
@@ -48,7 +32,6 @@
             </p>
           </div>
 
-          <!-- Шаг 2 -->
           <div class="step">
             <img src="assets/icon2.png" alt="Шаг 2" />
             <h3>Погружение в VR</h3>
@@ -57,7 +40,6 @@
             </p>
           </div>
 
-          <!-- Шаг 3 -->
           <div class="step">
             <img src="assets/icon3.png" alt="Шаг 3" />
             <h3>Отслеживание тревоги</h3>
@@ -66,14 +48,10 @@
               постепенно осваиваясь и замечая снижение страха.
             </p>
           </div>
-
-          <!-- Можно добавить больше шагов... -->
         </div>
       </section>
     </main>
 
-    <footer>
-      <p>&copy; 2025 VR Therapy App. Все права защищены.</p>
-    </footer>
+    <script src="js/main.js"></script>
   </body>
 </html>

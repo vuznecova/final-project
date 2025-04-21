@@ -2,35 +2,20 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Main page</title>
     <link rel="stylesheet" href="css/style.css" />
   </head>
   <body>
-    <header>
-      <nav>
-        <ul class="nav-list">
-          <li><a href="index.html">Home</a></li>
-          <li><a href="how-it-works.html">How it works</a></li>
-          <li><a href="levels.html">Levels</a></li>
-          <li><a href="progress.html">Progress</a></li>
-          <li><a href="about.html">About us</a></li>
-          <li><a id="loginLink" href="login.html" class="btn-nav btn-nav--primary">Log in</a></li>
-          <li><a id="logoutLink" href="#" class="btn-nav btn-nav--primary" style="display:none;">Log out</a></li>
-          <li><a href="register.html" class="btn-nav btn-nav--primary">Sign up</a></li>    
-        </ul>
-      </nav>
-    </header>
-
+    <div id="header-placeholder"></div>
     <main>
-      <!-- Hero section -->
       <section class="hero">
         <h1>VR Therapy Application</h1>
         <p>Overcome your fear of heights with virtual therapy.</p>
-        <button id="startTherapyBtn" class="btn"><a href="levels.html"></a>Start Therapy</a></button>
-      </section>      
-
-      <!-- Benefits block -->
+        <button id="startTherapyBtn" class="btn">
+          <a href="levels.html"></a>Start Therapy </a>
+        </button>
+      </section>
       <section class="benefits">
         <h2>Why VR Therapy?</h2>
         <div class="benefits-grid">
@@ -53,48 +38,6 @@
       </section>
     </main>
 
-    <footer>
-      <p>&copy; 2025 VR Therapy App. All rights reserved.</p>
-    </footer>
-
-    <script>
-      document.addEventListener('DOMContentLoaded', () => {
-        // Check if there's a token in localStorage
-        const token = localStorage.getItem('token');
-
-        // Get login/logout links
-        const loginLink = document.getElementById('loginLink');
-        const logoutLink = document.getElementById('logoutLink');
-
-        // Toggle visibility based on auth state
-        if (token) {
-          loginLink.style.display = 'none';
-          logoutLink.style.display = 'inline-block';
-        } else {
-          loginLink.style.display = 'inline-block';
-          logoutLink.style.display = 'none';
-        }
-
-        // Handle logout click: remove token and reload
-        logoutLink.addEventListener('click', (e) => {
-          e.preventDefault();
-          localStorage.removeItem('token');
-          window.location.reload();
-        });
-
-        // "Start Therapy" button logic
-        const startBtn = document.getElementById('startTherapyBtn');
-        startBtn.addEventListener('click', () => {
-          if (token) {
-            // If logged in, go to levels page
-            window.location.href = 'levels.html';
-          } else {
-            // Otherwise ask to log in first
-            alert('Please log in to begin therapy');
-            window.location.href = 'login.html';
-          }
-        });
-      });
-    </script>
+    <script src="js/main.js"></script>
   </body>
 </html>

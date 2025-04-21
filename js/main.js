@@ -1,49 +1,60 @@
 // js/main.js
 
-// Функция для переключения источника панорамы
-function changePanorama(src) {
-    const skyEl = document.querySelector('#sky');
-    skyEl.setAttribute('src', src);
-    console.log('Панорама изменена на: ' + src);
-  }
-  
-  // Обработка нажатий на кнопки меню для смены панорамы
-  document.querySelectorAll('.panorama-btn').forEach(btn => {
-    btn.addEventListener('click', (e) => {
-      const newSrc = e.target.getAttribute('data-src');
-      changePanorama(newSrc);
+function loadHeader() {
+  return fetch('partials/header.html')
+    .then(res => {
+      if (!res.ok) throw new Error('Header not found');
+      return res.text();
+    })
+    .then(html => {
+      document.getElementById('header-placeholder').innerHTML = html;
     });
-  });
-  
-  // Обработка изменения значения слайдера тревоги
-  const anxietyRange = document.getElementById('anxietyRange');
-  const anxietyValue = document.getElementById('anxietyValue');
-  
-  anxietyRange.addEventListener('input', (e) => {
-    anxietyValue.textContent = e.target.value;
-    // Здесь можно сохранить значение в LocalStorage или отправить на сервер
-    console.log('Уровень тревоги: ' + e.target.value);
-  });
-  
-  // Пример обработки клика по горячей точке
-  const hotspot = document.getElementById('hotspot1');
-  hotspot.addEventListener('click', () => {
-    // Например, переключим панораму на другую при клике по горячей точке
-    changePanorama('assets/panorama2.jpg');
-  });
-  
-  // Сохранение уровня тревоги в LocalStorage
-function saveAnxietyLevel(level) {
-    // Получаем текущую дату и время
-    const timestamp = new Date().toISOString();
-    // Сохраняем данные в формате JSON
-    let anxietyData = JSON.parse(localStorage.getItem('anxietyData')) || [];
-    anxietyData.push({ level, timestamp });
-    localStorage.setItem('anxietyData', JSON.stringify(anxietyData));
-    console.log('Данные сохранены:', anxietyData);
+}
+
+function initAuth() {
+  const token        = localStorage.getItem('token');
+  const userName     = localStorage.getItem('userName');
+  const signUpLink   = document.getElementById('signUpLink');
+  const loginLink    = document.getElementById('loginLink');
+  const logoutLink   = document.getElementById('logoutLink');
+  const greetingElem = document.getElementById('greeting');
+
+  if (token && userName) {
+    signUpLink?.remove();
+    loginLink?.remove();
+    logoutLink   && (logoutLink.style.display = 'inline-block');
+    greetingElem && ((greetingElem.textContent = `Hi, ${userName}`), greetingElem.style.display = 'inline-block');
+  } else {
+    loginLink  && (loginLink.style.display = 'inline-block');
+    signUpLink && (signUpLink.style.display = 'inline-block');
+    logoutLink && (logoutLink.style.display = 'none');
+    greetingElem && (greetingElem.style.display = 'none');
   }
-  
-  anxietyRange.addEventListener('change', (e) => {
-    saveAnxietyLevel(e.target.value);
+
+  logoutLink?.addEventListener('click', e => {
+    e.preventDefault();
+    localStorage.removeItem('token');
+    localStorage.removeItem('userName');
+    window.location.reload();
   });
-  
+}
+
+function initStartTherapy() {
+  const startBtn = document.getElementById('startTherapyBtn');
+  startBtn?.addEventListener('click', () => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      window.location.href = 'levels.html';
+    } else {
+      alert('Please log in to begin therapy');
+      window.location.href = 'login.html';
+    }
+  });
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  loadHeader()
+    .then(initAuth)
+    .then(initStartTherapy)
+    .catch(err => console.error('Ошибка инициализации:', err));
+});

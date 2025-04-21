@@ -1,10 +1,7 @@
 // js/auth.js
-document.addEventListener('DOMContentLoaded', () => {
-  const registerForm = document.getElementById('registerForm');
-  const loginForm    = document.getElementById('loginForm');
-  const navList      = document.querySelector('.nav-list');
 
-  // 1) Регистрация
+(async function() {
+  const registerForm = document.getElementById('registerForm');
   if (registerForm) {
     registerForm.addEventListener('submit', async e => {
       e.preventDefault();
@@ -12,7 +9,6 @@ document.addEventListener('DOMContentLoaded', () => {
       const surname  = e.target.surname.value.trim();
       const email    = e.target.email.value.trim();
       const password = e.target.password.value;
-
       try {
         const res = await fetch('http://localhost:5000/api/auth/register', {
           method: 'POST',
@@ -21,7 +17,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
         const data = await res.json();
         if (!res.ok) throw new Error(data.error || 'Registration failed');
-
         alert('Registration successful! Please log in.');
         window.location.href = 'login.html';
       } catch (err) {
@@ -30,13 +25,12 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // 2) Логин
+  const loginForm = document.getElementById('loginForm');
   if (loginForm) {
     loginForm.addEventListener('submit', async e => {
       e.preventDefault();
       const email    = e.target.email.value.trim();
       const password = e.target.password.value;
-
       try {
         const res  = await fetch('http://localhost:5000/api/auth/login', {
           method: 'POST',
@@ -45,12 +39,9 @@ document.addEventListener('DOMContentLoaded', () => {
         });
         const data = await res.json();
         if (!res.ok) throw new Error(data.error || 'Login failed');
-
-        // Cохраняем токен и имя
         localStorage.setItem('token', data.token);
         const payload = JSON.parse(atob(data.token.split('.')[1]));
         localStorage.setItem('userName', payload.name);
-
         window.location.href = 'index.html';
       } catch (err) {
         alert(err.message);
@@ -58,24 +49,36 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-// 3) Меняем шапку, если авторизован
-const token = localStorage.getItem('token');
-const userName = localStorage.getItem('userName');
+  const token        = localStorage.getItem('token');
+  const userName     = localStorage.getItem('userName');
+  const signUpLink   = document.getElementById('signUpLink');
+  const loginLink    = document.getElementById('loginLink');
+  const logoutLink   = document.getElementById('logoutLink');
+  const greetingElem = document.getElementById('greeting');
 
-// Проверка элементов навигации (возможно, у вас другая структура)
-const navArea = document.querySelector('header') || document.querySelector('nav') || document;
-const signUpButton = document.querySelector('a[href="register.html"]') || document.querySelector('.sign-up') || document.querySelector('a:contains("SIGN UP")');
-const loginButton = document.querySelector('a[href="login.html"]') || document.querySelector('.log-in') || document.querySelector('a:contains("LOG IN")');
-
-console.log('Проверка авторизации:', { token, userName });
-
-if (token && userName) {
-  console.log('Пользователь авторизован, меняем шапку');
-  
-  // скрываем Sign up
-  if (signUpButton) {
-    signUpButton.style.display = 'none';
-    console.log('Скрыли Sign up');
+  if (token && userName) {
+    if (signUpLink) signUpLink.style.display = 'none';
+    if (loginLink)  loginLink.style.display  = 'none';
+    if (logoutLink) {
+      logoutLink.style.display = 'inline-block';
+    }
+    if (greetingElem) {
+      greetingElem.style.display = 'inline-block';
+      greetingElem.textContent   = `Hi, ${userName}`;
+    }
+  } else {
+    if (signUpLink)   signUpLink.style.display = 'inline-block';
+    if (loginLink)    loginLink.style.display  = 'inline-block';
+    if (logoutLink)   logoutLink.style.display = 'none';
+    if (greetingElem) greetingElem.style.display = 'none';
   }
-}
-});
+
+  if (logoutLink) {
+    logoutLink.addEventListener('click', e => {
+      e.preventDefault();
+      localStorage.removeItem('token');
+      localStorage.removeItem('userName');
+      window.location.reload();
+    });
+  }
+})();

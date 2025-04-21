@@ -3,34 +3,16 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Панорама</title>
-    <!-- Подключаем A-Frame -->
+    <title>Panorama</title>
     <script src="https://aframe.io/releases/1.3.0/aframe.min.js"></script>
     <link rel="stylesheet" href="css/style.css" />
   </head>
   <body>
-    <!-- Шапка с навигацией -->
-    <header>
-      <nav>
-        <ul>
-          <li><a href="index.html">Home</a></li>
-          <li><a href="how-it-works.html">How it works</a></li>
-          <li><a href="levels.html">Levels</a></li>
-          <li><a href="progress.html">Progress</a></li>
-          <li><a href="about.html">About us</a></li>
-          <li><a href="login.html" class="btn-nav btn-nav--primary">Log in</a></li>
-          <li><a href="register.html" class="btn-nav btn-nav--primary">Sign up</a></li>    
-        </ul>
-      </nav>
-    </header>
-    
+    <div id="header-placeholder"></div>
 
-    <!-- Сцена A-Frame -->
     <a-scene>
-      <!-- Панорама, которую можно менять в зависимости от выбранного уровня -->
       <a-sky id="sky" src="assets/panorama1.jpg" rotation="0 -130 0"></a-sky>
 
-      <!-- Пример горячей точки для дополнительной интерактивности -->
       <a-entity 
         id="hotspot1"
         geometry="primitive: circle; radius: 0.5"
@@ -41,13 +23,12 @@
         event-set__leave="_event: mouseleave; scale: 1 1 1">
       </a-entity>
 
-      <!-- Камера с курсором для взаимодействия -->
       <a-entity camera look-controls>
         <a-cursor fuse="true" fuse-timeout="1000" material="color: white; shader: flat"></a-cursor>
       </a-entity>
     </a-scene>
 
-    <!-- Подключаем скрипт для обработки уровня и смены панорамы -->
     <script src="js/panorama.js"></script>
+    <script src="js/auth.js"></script>
   </body>
 </html>
