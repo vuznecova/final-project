@@ -56,5 +56,38 @@ document.addEventListener('DOMContentLoaded', () => {
   loadHeader()
     .then(initAuth)
     .then(initStartTherapy)
-    .catch(err => console.error('Ошибка инициализации:', err));
+    .catch(err => console.error('Error:', err));
 });
+
+function initAuth() {
+  const token        = localStorage.getItem('token');
+  const signUpLink   = document.getElementById('signUpLink');
+  const loginLink    = document.getElementById('loginLink');
+  const logoutLink   = document.getElementById('logoutLink');
+  const greetingElem = document.getElementById('greeting');
+  const progressLink = document.getElementById('progressLink'); 
+
+  if (token) {
+    signUpLink?.remove();
+    loginLink?.remove();
+    logoutLink.style.display   = 'inline-block';
+    greetingElem.textContent   = `Hi, ${localStorage.getItem('userName')}`;
+    greetingElem.style.display = 'inline-block';
+
+    progressLink.style.display = 'inline-block';
+  } else {
+    loginLink.style.display    = 'inline-block';
+    signUpLink.style.display   = 'inline-block';
+    logoutLink.style.display   = 'none';
+    greetingElem.style.display = 'none';
+
+    progressLink.style.display = 'none';
+  }
+
+  logoutLink?.addEventListener('click', e => {
+    e.preventDefault();
+    localStorage.removeItem('token');
+    localStorage.removeItem('userName');
+    window.location.reload();
+  });
+}

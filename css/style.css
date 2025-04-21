@@ -53,6 +53,16 @@ body {
   overflow-x: hidden;
 }
 
+.transition-fade {
+  opacity: 1;
+  transition: opacity 0.5s ease;
+}
+
+html.is-changing .transition-fade {
+  opacity: 0;
+}
+
+
 /* ==========================================================================
    4. BACKGROUND DECORATIONS
    ========================================================================== */
@@ -593,7 +603,6 @@ main {
    AUTH FORMS: Login & Register Styling
    ================================================== */
 
-/* Обёртка страницы аутентификации */
 .page--auth {
   display: flex;
   justify-content: center;
@@ -602,7 +611,6 @@ main {
   background-color: var(--bg-light);
 }
 
-/* Карточка с формой */
 .auth-card {
   background: #fff;
   border-radius: 16px;
@@ -619,7 +627,6 @@ main {
   width: 350px;
 }
 
-/* Заголовок формы */
 .auth-title {
   font-family: "Montserrat", sans-serif;
   font-size: 2rem;
@@ -627,7 +634,6 @@ main {
   margin-bottom: 24px;
 }
 
-/* Поля формы */
 .field {
   margin-bottom: 20px;
   text-align: left;
@@ -655,7 +661,6 @@ main {
   background: #fff;
 }
 
-/* Кнопка отправки */
 .btn--auth {
   display: block;
   width: 100%;
@@ -678,7 +683,6 @@ main {
   transform: translateY(0);
 }
 
-/* Нижняя подсказка и ссылка */
 .auth-footer {
   font-size: 0.9rem;
   color: var(--text-light);
@@ -692,7 +696,6 @@ main {
   text-decoration: underline;
 }
 
-/* Если нужно, можно добавить фоновые „пузыри” под формой */
 .page--auth::before {
   content: "";
   position: absolute;
@@ -700,4 +703,19 @@ main {
 .page--auth::after {
   content: "";
   position: absolute;
+}
+
+.error-message {
+  display: none;
+  color: var(--accent-warn);
+  font-weight: 600;
+  margin: 8px 0 16px;
+  text-align: center;
+}
+
+.field-hint {
+  font-size: 0.85rem;
+  color: var(--text-light);
+  margin-top: 4px;
+  margin-left: 4px;
 }
