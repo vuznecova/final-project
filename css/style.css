@@ -230,7 +230,7 @@ main {
 
 .hero h1 {
   font-size: 3em;
-  color: var(--accent);
+  color: var(--accent-);
   margin-bottom: 20px;
   position: relative;
 }

@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
-  <title>Log In — VR Therapy App</title>
+  <title>Login</title>
   <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
   <!-- Навигация -->
   <header class="site-header">
     <nav>
-      <ul>
+      <ul class="nav-list">
         <li><a href="index.html">Home</a></li>
         <li><a href="how-it-works.html">How it works</a></li>
         <li><a href="levels.html">Levels</a></li>
@@ -21,10 +21,10 @@
     </nav>
   </header>
 
-  <!-- Основной контент -->
   <main class="page page--auth">
     <div class="auth-card">
-      <h1 class="auth-title">Create account!</h1>
+      <h1 class="auth-title">Login!</h1>
+      <form id="loginForm">
       <div class="field">
         <span>Email</span>
         <input type="email" name="email" required>
@@ -33,15 +33,15 @@
         <span>Password</span>
         <input type="password" name="password" required>
       </div>
-      <button class="btn--auth">Sign Up</button>
+      <button class="btn--auth" type="submit">Log in</button>
+      </form>
       <p class="auth-footer">
         Don't have an account?
-        <a href="register.html">Sign in</a>
+        <a href="register.html">Sign un</a>
       </p>
     </div>
   </main>
 
-  <!-- Подключение скрипта авторизации -->
   <script src="js/auth.js"></script>
 </body>
 </html>

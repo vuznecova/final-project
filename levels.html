@@ -3,19 +3,20 @@
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Уровни экспозиции</title>
+    <title>Levels</title>
     <link rel="stylesheet" href="css/style.css"> <!-- Подключаем последний CSS с галереей -->
   </head>
   <body>
     <header>
       <nav>
-        <ul>
+        <ul class="nav-list">
           <li><a href="index.html">Home</a></li>
           <li><a href="how-it-works.html">How it works</a></li>
           <li><a href="levels.html">Levels</a></li>
           <li><a href="progress.html">Progress</a></li>
           <li><a href="about.html">About us</a></li>
-          <li><a href="login.html" class="btn-nav btn-nav--primary">Log in</a></li>
+          <li><a id="loginLink" href="login.html" class="btn-nav btn-nav--primary">Log in</a></li>
+          <li><a id="logoutLink" href="#" class="btn-nav btn-nav--primary" style="display:none;">Log out</a></li>
           <li><a href="register.html" class="btn-nav btn-nav--primary">Sign up</a></li>    
         </ul>
       </nav>
@@ -28,7 +29,7 @@
     <img src="assets/test.jpg" alt="Уровень 1">
     <h2>Уровень 1</h2>
     <p>Минимальная высота, спокойное начало.</p>
-    <a href="#" class="btn">Выбрать</a>
+    <a href="panorama.html" class="btn">Выбрать</a>
   </div>
   <div class="level">
     <img src="assets/test.jpg" alt="Уровень 2">
