@@ -2,6 +2,18 @@
 
 (async function() {
   // =====================
+  // SHOW AUTHENTICATION WARNING BASED ON URL PARAMS
+  // =====================
+  const urlParams = new URLSearchParams(window.location.search);
+  if (urlParams.get('error') === 'auth') {
+    const loginError = document.getElementById('loginError');
+    if (loginError) {
+      loginError.textContent   = 'Please log in to access levels';
+      loginError.style.display = 'block';
+    }
+  }
+
+  // =====================
   // REGISTRATION
   // =====================
   const registerForm = document.getElementById('registerForm');

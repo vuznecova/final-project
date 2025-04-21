@@ -9,8 +9,7 @@ function initLevelSelection() {
         if (token) {
           window.location.href = link.href;
         } else {
-          alert('Please login to start.');
-          window.location.href = 'login.html';
+          window.location.href = 'login.html?error=auth';
         }
       });
     });

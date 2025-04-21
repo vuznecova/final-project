@@ -46,8 +46,8 @@ function initStartTherapy() {
     if (token) {
       window.location.href = 'levels.html';
     } else {
-      alert('Please log in to begin therapy');
-      window.location.href = 'login.html';
+      // Убираем alert, сразу редиректим с параметром ?error=auth
+      window.location.href = 'login.html?error=auth';
     }
   });
 }
