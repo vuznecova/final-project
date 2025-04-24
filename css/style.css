@@ -69,9 +69,9 @@ html.is-changing .transition-fade {
 
    body::before {
     content: "";
-    position: absolute;
+    position: fixed;      /* ← fixed вместо absolute */
     border-radius: 50%;
-    z-index: -1; /* Change from 0 to -1 */
+    z-index: -1;
     top: -100px;
     left: -100px;
     width: 400px;
@@ -80,12 +80,11 @@ html.is-changing .transition-fade {
     opacity: 0.5;
   }
   
-  /* Also adjust the body::after element (orange bubble) */
   body::after {
     content: "";
-    position: absolute;
+    position: fixed;      /* ← fixed вместо absolute */
     border-radius: 50%;
-    z-index: -1; /* Change from 0 to -1 */
+    z-index: -1;
     bottom: -100px;
     right: -100px;
     width: 300px;
@@ -188,20 +187,6 @@ header nav ul li a:hover {
   background-color: var(--accent-dark);
 }
 
-/* ==========================================================================
-   6. FOOTER
-   ========================================================================== */
-
-footer {
-  background-color: var(--accent);
-  color: #fff;
-  text-align: center;
-  padding: 15px 20px;
-  position: fixed;
-  bottom: 0;
-  width: 100%;
-  box-shadow: 0 -2px 4px rgba(0,0,0,0.1);
-}
 
 /* ==========================================================================
    7. MAIN LAYOUT
@@ -718,4 +703,168 @@ main {
   color: var(--text-light);
   margin-top: 4px;
   margin-left: 4px;
+}
+
+/* ABOUT PROJECT */
+
+.about {
+  background: #fff;
+  padding: 40px 20px;
+  margin: 40px auto;
+  max-width: 800px;
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  text-align: center;
+}
+.about h2 {
+  color: var(--accent);
+  margin-bottom: 20px;
+  font-size: 2em;
+}
+.about p {
+  color: var(--text-dark);
+  line-height: 1.6;
+  margin-bottom: 16px;
+}
+
+.about-container {
+  display: flex;
+  align-items: center;
+  gap: 40px;
+  max-width: 1200px;
+  margin: 0 auto;
+  flex-wrap: wrap; 
+}
+
+.about-text {
+  flex: 1 1 400px; 
+}
+
+.about-image {
+  flex: 0 0 300px; 
+  text-align: center;
+}
+
+.about-image img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+/* PROGRESS */
+
+.progress {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 40px 20px;
+  text-align: center;
+}
+#progress-overview {
+  font-size: 1.1rem;
+  margin-bottom: 24px;
+}
+#progress-chart {
+  max-width: 100%;
+  height: 300px;
+}
+/* контейнер-оверлей */
+.modal {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+/* скрывать */
+.modal.hidden {
+  display: none;
+}
+
+/* само окно */
+.modal-content {
+  background: #fff;
+  padding: 24px 32px;
+  border-radius: 8px;
+  text-align: center;
+  max-width: 90%;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+/* кнопки внизу */
+.modal-content .buttons {
+  margin-top: 16px;
+}
+
+.modal-content button {
+  margin: 0 8px;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  background: var(--accent);
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.modal-content button:hover {
+  background: var(--accent-dark);
+}
+
+/* Счётчик времени */
+.level-timer {
+  position: fixed;
+  top: 80px;              /* чуть ниже шапки */
+  right: 20px;
+  background: rgba(0, 0, 0, 0.5);
+  color: #fff;
+  font-size: 1.1rem;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-family: "Montserrat", sans-serif;
+  z-index: 1000;
+}
+
+/* Оверлей */
+.level-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+}
+
+/* Окно модалки */
+.level-modal {
+  background: #fff;
+  padding: 30px 40px;
+  border-radius: 12px;
+  text-align: center;
+  max-width: 320px;
+}
+.level-modal h2 {
+  margin: 0 0 12px;
+}
+.level-modal p {
+  margin: 0 0 20px;
+}
+.level-modal button {
+  margin: 0 6px;
+  padding: 8px 14px;
+  border: none;
+  border-radius: 6px;
+  background: var(--accent);
+  color: #fff;
+  cursor: pointer;
+}
+.level-modal button:hover {
+  background: var(--accent-dark);
 }
