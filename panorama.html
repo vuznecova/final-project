@@ -10,12 +10,12 @@
   <body>
     <div id="header-placeholder"></div>
 
+    <!-- Таймер -->
     <div id="levelTimer" class="level-timer">00:00</div>
 
+    <!-- Сцена -->
     <a-scene id="scene" cursor="rayOrigin: mouse">
       <a-sky id="sky" src="" rotation="0 -130 0"></a-sky>
-
-      <!-- наш хотспот -->
       <a-entity
         id="hotspot1"
         class="clickable"
@@ -23,24 +23,13 @@
         material="color: #FF0000; opacity: 0.8"
         position="0 1.6 -3"
       ></a-entity>
-
       <a-entity camera look-controls>
         <a-cursor fuse="false" material="shader: flat; color: white"></a-cursor>
       </a-entity>
     </a-scene>
 
-    <!-- Модальное окно, по умолчанию скрытое -->
-    <div id="levelModal" class="modal hidden">
-      <div class="modal-content">
-        <h2>Level Complete!</h2>
-        <p id="timeText">You finished in 0 seconds.</p>
-        <div class="buttons">
-          <button id="retryBtn">Retry</button>
-          <button id="nextBtn">Next Level</button>
-          <button id="backBtn">Back to Levels</button>
-        </div>
-      </div>
-    </div>
+    <!-- Пустой контейнер под динамические модалки и ачивки -->
+    <div id="ui-container"></div>
 
     <script src="js/main.js" defer></script>
     <script src="js/panorama.js" defer></script>

@@ -868,3 +868,168 @@ main {
 .level-modal button:hover {
   background: var(--accent-dark);
 }
+
+.badge-toast {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: var(--accent-dark);
+  color: #fff;
+  padding: 10px 14px;
+  border-radius: 30px;
+  display: flex;
+  align-items: center;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all .3s ease;
+  z-index: 2000;
+}
+.badge-toast.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+.badge-toast img {
+  width: 24px;
+  height: 24px;
+  margin-right: 8px;
+}
+
+/* Модальное окно */
+#completionModal .modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.6);
+  z-index: 1000;
+}
+
+#completionModal .modal-content {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: #fff;
+  padding: 30px 40px;
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.3);
+  z-index: 1001;
+  text-align: center;
+  max-width: 90%;
+}
+
+#completionModal .modal-content h2 {
+  margin-top: 0;
+}
+
+#completionModal .modal-content button {
+  margin: 12px 8px 0;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  background: var(--accent);
+  color: #fff;
+  font-weight: 600;
+  transition: background .2s;
+}
+
+#completionModal .modal-content button:hover {
+  background: var(--accent-dark);
+}
+
+/* Таймер */
+.level-timer {
+  position: fixed;
+  top: 80px;
+  right: 20px;
+  background: rgba(0,0,0,0.5);
+  color: #fff;
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-family: monospace;
+  z-index: 1000;
+}
+
+/* Модальное окно */
+#completionModal .modal-overlay {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.6);
+  z-index: 999;
+}
+#completionModal .modal-content {
+  position: fixed;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  background: #fff;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+  text-align: center;
+  z-index: 1000;
+  width: 90%; max-width: 400px;
+}
+#completionModal .modal-buttons {
+  margin-top: 1.5rem;
+  display: flex; justify-content: space-around;
+}
+#completionModal button {
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  padding: 0.6rem 1.2rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background 0.2s;
+}
+#completionModal button:hover {
+  background: var(--accent-dark);
+}
+
+/* 1) контейнер под все динамические UI-элементы */
+#ui-container {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  pointer-events: none; /* мышь «пролетает» мимо, не блокируем сцену */
+  z-index: 999;
+}
+
+/* Achievement UI */
+.achievement {
+  position: fixed;
+  top: 300px;                 /* чуть ниже хедера */
+  left: 50%;
+  transform: translateX(-50%) translateY(-10px); /* стартовая позиция чуть выше для анимации */
+  z-index: 10000;            /* над всем остальным */
+  display: flex;
+  align-items: center;
+  gap: 16px;                 /* расстояние между иконкой и текстом */
+  background: #fff;
+  padding: 16px 24px;        /* увеличенный padding */
+  border-radius: 8px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.15);
+  font-size: 1.25rem;        /* чуть крупнее */
+  opacity: 0;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+/* Когда добавлен класс .show — показываем и спускаем вниз */
+.achievement.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* Стили для самой иконки */
+.achievement img {
+  width: 48px;
+  height: 48px;
+}
+
+/* Стили для текста */
+.achievement span {
+  color: #333;
+  font-weight: 500;
+}

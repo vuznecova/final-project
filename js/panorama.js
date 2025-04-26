@@ -1,112 +1,124 @@
 // js/panorama.js
 
-// -----------------------------
-// 1. Получение параметра level из URL
-// -----------------------------
-function getParameterByName(name) {
+// ===== 1) Получаем параметр ?level=X из URL
+function getParam(name) {
   name = name.replace(/[\[\]]/g, '\\$&');
-  const url = window.location.href;
   const regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)');
-  const results = regex.exec(url);
-  if (!results) return null;
-  if (!results[2]) return '';
-  return decodeURIComponent(results[2].replace(/\+/g, ' '));
+  const res = regex.exec(location.href);
+  if (!res) return null;
+  if (!res[2]) return '';
+  return decodeURIComponent(res[2].replace(/\+/g, ' '));
 }
+const level = getParam('level') || '1';
 
-const level = getParameterByName('level') || '1';
-
-// -----------------------------
-// 2. Выбор изображения панорамы
-// -----------------------------
-let panoramaSrc;
-switch (level) {
-  case '1':
-    panoramaSrc = 'assets/panorama1.jpg';
-    break;
-  case '2':
-    panoramaSrc = 'assets/panorama2.jpg';
-    break;
-  case '3':
-    panoramaSrc = 'assets/panorama3.jpg';
-    break;
-  default:
-    panoramaSrc = 'assets/panorama1.jpg';
-}
-
-// -----------------------------
-// 3. Основная инициализация после загрузки страницы
-// -----------------------------
-window.addEventListener('load', () => {
-  console.log('[panorama.js] window.onload fired');
-
-  // 3.1 Устанавливаем фон
-  const skyEl = document.getElementById('sky');
-  skyEl.setAttribute('src', panoramaSrc);
-
-  // 3.2 Запускаем таймер
-  const timerElem = document.getElementById('levelTimer');
-  const startTime = Date.now();
-  const timerInterval = setInterval(() => {
-    const diff = Date.now() - startTime;
-    const secs = Math.floor(diff / 1000) % 60;
-    const mins = Math.floor(diff / 60000);
-    timerElem.textContent =
-      String(mins).padStart(2, '0') + ':' +
-      String(secs).padStart(2, '0');
-  }, 500);
-
-  // 3.3 Ждём, когда сцена будет готова
-  const sceneEl = document.querySelector('a-scene');
-  if (sceneEl.hasLoaded) {
-    initHotspot();
-  } else {
-    sceneEl.addEventListener('loaded', initHotspot);
-  }
-
-  // 3.4 Функция инициализации клика по hotspot
-  function initHotspot() {
-    console.log('[panorama.js] a-scene loaded');
-    const hotspot1 = document.getElementById('hotspot1');
-    console.log('[panorama.js] hotspot1 =', hotspot1);
-    hotspot1.addEventListener('click', () => {
-      console.log('[panorama.js] hotspot clicked hotspot1');
-      clearInterval(timerInterval);
-      const totalSec = Math.floor((Date.now() - startTime) / 1000);
-      console.log(`[panorama.js] Level done in ${totalSec} seconds`);
-      showLevelCompleteModal(totalSec);
-    });
-  }
+// ===== 2) Ставим нужную панораму
+document.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('sky')
+          .setAttribute('src', `assets/panorama${level}.jpg`);
 });
 
-// -----------------------------
-// 4. Показываем модалку завершения уровня
-// -----------------------------
-function showLevelCompleteModal(totalSec) {
-  // Создаём оверлей
-  const overlay = document.createElement('div');
-  overlay.className = 'level-overlay';
-  overlay.innerHTML = `
-    <div class="level-modal">
+// ===== 3) Таймер
+let startTime, timerId;
+function startTimer() {
+  startTime = Date.now();
+  const el = document.getElementById('levelTimer');
+  timerId = setInterval(() => {
+    const secs = Math.floor((Date.now() - startTime) / 1000);
+    const mm = String(Math.floor(secs / 60)).padStart(2, '0');
+    const ss = String(secs % 60).padStart(2, '0');
+    el.textContent = `${mm}:${ss}`;
+  }, 200);
+}
+
+// ===== 4) Всплывающая ачивка
+function showAchievement(text, iconUrl) {
+  const ach = document.createElement('div');
+  ach.className = 'achievement';
+  ach.innerHTML = `<img src="${iconUrl}" alt=""><span>${text}</span>`;
+  // позиционируем над сценой
+  ach.style.position = 'fixed';
+  ach.style.top = '20px';
+  ach.style.right = '20px';
+  ach.style.zIndex = '10000';
+  document.body.appendChild(ach);
+  // анимация
+  setTimeout(() => ach.classList.add('show'), 50);
+  setTimeout(() => {
+    ach.classList.remove('show');
+    setTimeout(() => ach.remove(), 500);
+  }, 3500);
+}
+
+// ===== 5) Модальное окно завершения уровня
+function showCompletion(elapsed) {
+  clearInterval(timerId);
+
+  // блокируем клики по сцене
+  document.getElementById('scene').style.pointerEvents = 'none';
+
+  // создаём обёртку модалки
+  const wrap = document.createElement('div');
+  wrap.id = 'completionModal';
+  Object.assign(wrap.style, {
+    position: 'fixed',
+    top: 0, left: 0, width: '100%', height: '100%',
+    zIndex: 9999,
+  });
+
+  wrap.innerHTML = `
+    <div class="modal-overlay" style="
+      position: absolute;
+      top:0; left:0; width:100%; height:100%;
+      background: rgba(0,0,0,0.5);
+    "></div>
+    <div class="modal-content" style="
+      position: absolute;
+      top:50%; left:50%;
+      transform: translate(-50%,-50%);
+      background:#fff;
+      padding:30px;
+      border-radius:8px;
+      text-align:center;
+    ">
       <h2>Level Complete!</h2>
-      <p>You finished in ${totalSec} second${totalSec !== 1 ? 's' : ''}.</p>
-      <button id="retryBtn">Retry</button>
-      <button id="nextBtn">Next Level</button>
-      <button id="backBtn">Back to Levels</button>
+      <p>You finished in ${elapsed} second${elapsed !== 1 ? 's' : ''}.</p>
+      <div class="modal-buttons" style="margin-top:20px;">
+        <button id="retryBtn" style="margin:0 8px;">Retry</button>
+        <button id="nextBtn" style="margin:0 8px;">Next Level</button>
+        <button id="backBtn" style="margin:0 8px;">Back to Levels</button>
+      </div>
     </div>
   `;
-  document.body.appendChild(overlay);
 
-  // Привязываем кнопки
-  overlay.querySelector('#retryBtn').addEventListener('click', () => {
-    window.location.reload();
-  });
-  overlay.querySelector('#nextBtn').addEventListener('click', () => {
-    const url = new URL(window.location.href);
-    const lvl = parseInt(url.searchParams.get('level') || '1', 10);
-    url.searchParams.set('level', lvl + 1);
-    window.location.href = url.toString();
-  });
-  overlay.querySelector('#backBtn').addEventListener('click', () => {
+  document.body.appendChild(wrap);
+
+  // делаем кнопки рабочими
+  document.getElementById('retryBtn').onclick = () => window.location.reload();
+  document.getElementById('nextBtn').onclick = () => {
+    const next = parseInt(level, 10) + 1;
+    window.location.href = `panorama.html?level=${next}`;
+  };
+  document.getElementById('backBtn').onclick = () => {
     window.location.href = 'levels.html';
+  };
+
+  // и показываем ачивку
+  showAchievement(`Level ${level} Complete!`, 'assets/icons/achv1.png');
+}
+
+// ===== 6) Старт уровня: таймер + обработчик клика по шарику
+function initLevel() {
+  startTimer();
+  const hot = document.getElementById('hotspot1');
+  hot.addEventListener('click', () => {
+    const elapsed = Math.floor((Date.now() - startTime) / 1000);
+    showCompletion(elapsed);
   });
+}
+
+// ждём полной загрузки
+if (document.readyState === 'complete') {
+  initLevel();
+} else {
+  window.addEventListener('load', initLevel);
 }
