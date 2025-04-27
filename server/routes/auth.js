@@ -1,58 +1,71 @@
 // server/routes/auth.js
-const express = require('express');
-const bcrypt  = require('bcrypt');
-const jwt     = require('jsonwebtoken');
-const db      = require('../db');
 
-const router = express.Router();
-const JWT_SECRET = process.env.JWT_SECRET;
+const express   = require('express');
+const router    = express.Router();
+const jwt       = require('jsonwebtoken');
+const bcrypt    = require('bcrypt');
+const db        = require('../db/knex');
+const auth      = require('../middleware/auth');
 
-// Регистрация
+const JWT_SECRET = process.env.JWT_SECRET || 'your_jwt_secret_here';
+
+// POST /api/auth/register
 router.post('/register', async (req, res) => {
   const { name, surname, email, password } = req.body;
+  if (!name || !surname || !email || !password) {
+    return res.status(400).json({ error: 'Missing fields' });
+  }
   try {
-    // Проверяем существование
-    const [exists] = await db.execute(
-      'SELECT id FROM users WHERE email = ?',
-      [email]
-    );
-    if (exists.length) return res.status(400).json({ error: 'Email already in use' });
-
-    // Хешируем пароль и вставляем
     const hashed = await bcrypt.hash(password, 10);
-    await db.execute(
-      `INSERT INTO users (first_name, last_name, email, password) VALUES (?, ?, ?, ?)`,
-    [name, surname, email, hashed]
-    );
-    res.status(201).json({ message: 'Registration successful' });
+    const [userId] = await db('users').insert({ name, surname, email, password: hashed });
+    res.json({ success: true, userId });
   } catch (err) {
-    console.error(err);
+    console.error('Registration error:', err);
     res.status(500).json({ error: 'Server error' });
   }
 });
 
-// Логин
+// POST /api/auth/login
 router.post('/login', async (req, res) => {
   const { email, password } = req.body;
+  if (!email || !password) {
+    return res.status(400).json({ error: 'Missing email or password' });
+  }
   try {
-    // Ищем пользователя
-    const [rows] = await db.execute(
-      'SELECT id, first_name, last_name, password FROM users WHERE email = ?',
-      [email]
+    const users = await db('users').where({ email });
+    if (!users.length) {
+      return res.status(401).json({ error: 'Invalid credentials' });
+    }
+    const user  = users[0];
+    const match = await bcrypt.compare(password, user.password);
+    if (!match) {
+      return res.status(401).json({ error: 'Invalid credentials' });
+    }
+
+    // Подпись токена с полем name
+    const token = jwt.sign(
+      { id: user.id, name: user.name },
+      JWT_SECRET,
+      { expiresIn: '1h' }
     );
-    if (!rows.length) return res.status(400).json({ error: 'Invalid credentials' });
-
-    const user = rows[0];
-    const ok = await bcrypt.compare(password, user.password);
-    if (!ok) return res.status(400).json({ error: 'Invalid credentials' });
-
-    // Отправляем JWT
-    const fullName = `${user.first_name} ${user.last_name}`;
-    const token = jwt.sign({ userId: user.id, name: fullName },
-                           process.env.JWT_SECRET, { expiresIn: '1h' });
     res.json({ token });
   } catch (err) {
-    console.error(err);
+    console.error('Login error:', err);
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
+// GET /api/auth/me
+router.get('/me', auth, async (req, res) => {
+  try {
+    const user = await db('users')
+      .select('id', 'first_name as name')
+      .where({ id: req.user.id })
+      .first();
+    if (!user) return res.status(404).json({ error: 'User not found' });
+    res.json(user);
+  } catch (err) {
+    console.error('GET /me error:', err);
     res.status(500).json({ error: 'Server error' });
   }
 });

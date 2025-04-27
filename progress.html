@@ -1,7 +1,9 @@
+<!DOCTYPE html>
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Progress</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Your Progress</title>
   <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
@@ -9,14 +11,27 @@
   <main>
     <section class="progress">
       <h1>Your Progress</h1>
-      <div id="progress-overview"></div>
-      <canvas id="progress-chart"></canvas>
+
+      <!-- Пустое состояние -->
+      <div id="empty-state" class="empty-state hidden">
+        <p>You haven’t completed any levels yet.</p>
+        <a href="levels.html" class="btn">Start Levels</a>
+      </div>
+
+      <!-- Основной контент, показываем только когда data.length > 0 -->
+      <div id="progress-content">
+        <div id="progress-overview"></div>
+        <canvas id="progress-chart"></canvas>
+        <div id="recent-attempts" class="recent-attempts">
+          <h2>Recent Attempts</h2>
+          <ul id="attempts-list"></ul>
+        </div>
+      </div>
     </section>
   </main>
-  
+
   <script src="https://cdn.jsdelivr.net/npm/chart.js" defer></script>
   <script src="js/main.js" defer></script>
   <script src="js/progress.js" defer></script>
-  <script src="js/main.js" defer></script>
 </body>
 </html>

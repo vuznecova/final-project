@@ -1,6 +1,9 @@
 // js/panorama.js
 
-// ===== 1) Получаем параметр ?level=X из URL
+// 1) Константа уровней
+const MAX_LEVEL = 6;
+
+// 2) Утилита для чтения ?level=… из URL
 function getParam(name) {
   name = name.replace(/[\[\]]/g, '\\$&');
   const regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)');
@@ -11,13 +14,132 @@ function getParam(name) {
 }
 const level = getParam('level') || '1';
 
-// ===== 2) Ставим нужную панораму
-document.addEventListener('DOMContentLoaded', () => {
-  document.getElementById('sky')
-          .setAttribute('src', `assets/panorama${level}.jpg`);
-});
+// 3) Показ «тоста»
+function showAchievement(text) {
+  const ach = document.createElement('div');
+  ach.className = 'achievement';
+  ach.innerHTML = `<span>${text}</span>`;
+  document.getElementById('ui-container').appendChild(ach);
+  setTimeout(() => ach.classList.add('show'), 50);
+  setTimeout(() => {
+    ach.classList.remove('show');
+    setTimeout(() => ach.remove(), 500);
+  }, 3000);
+}
 
-// ===== 3) Таймер
+// 4) Отправка прогресса
+async function recordProgress(level, seconds) {
+  const token = localStorage.getItem('token');
+  console.log('recordProgress – token:', token);
+  if (!token) {
+    showAchievement('Not logged in — progress not saved');
+    return;
+  }
+  const payload = { level: parseInt(level, 10), duration: seconds };
+  console.log('Saving progress:', payload);
+
+  try {
+    const res = await fetch('http://localhost:5000/api/progress', {
+      method: 'POST',
+      headers: {
+        'Content-Type':  'application/json',
+        'Authorization': 'Bearer ' + token
+      },
+      body: JSON.stringify(payload)
+    });
+    const text = await res.text();
+    let data;
+    try { data = JSON.parse(text); } catch { data = text; }
+    console.log(`API ответ ${res.status}:`, data);
+
+    if (res.ok)           showAchievement('Progress saved!');
+    else if (res.status===401) showAchievement('Session expired — log in again');
+    else                  showAchievement('Error saving progress');
+  } catch (err) {
+    console.error('recordProgress error:', err);
+    showAchievement('Error saving progress');
+  }
+}
+
+// 5) Ачивка за все уровни
+function showFinalAchievement() {
+  showAchievement('Master of Heights!');
+}
+
+// 6) Показ модалки окончания уровня
+async function showCompletion(elapsed) {
+  clearInterval(timerId);
+
+  // 6.1 сохраняем прогресс, но не редиректим
+  await recordProgress(level, elapsed);
+
+  // 6.2 блокируем саму сцену
+  document.getElementById('scene').style.pointerEvents = 'none';
+
+  // 6.3 Удаляем старую модалку (если была)
+  const old = document.getElementById('completionModal');
+  if (old) old.remove();
+
+  // 6.4 Создаём новый контейнер
+  const wrap = document.createElement('div');
+  wrap.id = 'completionModal';
+
+  // 6.5 Добавляем overlay
+  const overlay = document.createElement('div');
+  overlay.className = 'modal-overlay';
+  wrap.appendChild(overlay);
+
+  // 6.6 Создаём контент
+  const modal = document.createElement('div');
+  modal.className = 'modal-content';
+
+  const title = document.createElement('h2');
+  title.textContent = 'Level Complete!';
+  modal.appendChild(title);
+
+  const msg = document.createElement('p');
+  msg.textContent = `You finished in ${elapsed} second${elapsed !== 1 ? 's' : ''}.`;
+  modal.appendChild(msg);
+
+  const buttons = document.createElement('div');
+  buttons.className = 'modal-buttons';
+
+  const retryBtn = document.createElement('button');
+  retryBtn.textContent = 'Retry';
+  buttons.appendChild(retryBtn);
+
+  const nextBtn = document.createElement('button');
+  nextBtn.textContent = 'Next Level';
+  buttons.appendChild(nextBtn);
+
+  const backBtn = document.createElement('button');
+  backBtn.textContent = 'Back to Levels';
+  buttons.appendChild(backBtn);
+
+  modal.appendChild(buttons);
+  wrap.appendChild(modal);
+
+  // 6.7 Вешаем слушатели **до** добавления в DOM
+  retryBtn.addEventListener('click', () => window.location.reload());
+  backBtn.addEventListener('click', () => window.location.href = 'levels.html');
+  nextBtn.addEventListener('click', () => {
+    const next = parseInt(level, 10) + 1;
+    if (next > MAX_LEVEL) {
+      showFinalAchievement();
+      setTimeout(() => window.location.href = 'levels.html', 1500);
+    } else {
+      window.location.href = `panorama.html?level=${next}`;
+    }
+  });
+
+  // 6.8 Вставляем в документ
+  document.body.appendChild(wrap);
+
+  // 6.9 Показ ачивки уровня
+  showAchievement(`Level ${level} Complete!`);
+}
+
+// 7) Таймер
 let startTime, timerId;
 function startTimer() {
   startTime = Date.now();
@@ -30,93 +152,19 @@ function startTimer() {
   }, 200);
 }
 
-// ===== 4) Всплывающая ачивка
-function showAchievement(text, iconUrl) {
-  const ach = document.createElement('div');
-  ach.className = 'achievement';
-  ach.innerHTML = `<img src="${iconUrl}" alt=""><span>${text}</span>`;
-  // позиционируем над сценой
-  ach.style.position = 'fixed';
-  ach.style.top = '20px';
-  ach.style.right = '20px';
-  ach.style.zIndex = '10000';
-  document.body.appendChild(ach);
-  // анимация
-  setTimeout(() => ach.classList.add('show'), 50);
-  setTimeout(() => {
-    ach.classList.remove('show');
-    setTimeout(() => ach.remove(), 500);
-  }, 3500);
-}
-
-// ===== 5) Модальное окно завершения уровня
-function showCompletion(elapsed) {
-  clearInterval(timerId);
-
-  // блокируем клики по сцене
-  document.getElementById('scene').style.pointerEvents = 'none';
-
-  // создаём обёртку модалки
-  const wrap = document.createElement('div');
-  wrap.id = 'completionModal';
-  Object.assign(wrap.style, {
-    position: 'fixed',
-    top: 0, left: 0, width: '100%', height: '100%',
-    zIndex: 9999,
-  });
-
-  wrap.innerHTML = `
-    <div class="modal-overlay" style="
-      position: absolute;
-      top:0; left:0; width:100%; height:100%;
-      background: rgba(0,0,0,0.5);
-    "></div>
-    <div class="modal-content" style="
-      position: absolute;
-      top:50%; left:50%;
-      transform: translate(-50%,-50%);
-      background:#fff;
-      padding:30px;
-      border-radius:8px;
-      text-align:center;
-    ">
-      <h2>Level Complete!</h2>
-      <p>You finished in ${elapsed} second${elapsed !== 1 ? 's' : ''}.</p>
-      <div class="modal-buttons" style="margin-top:20px;">
-        <button id="retryBtn" style="margin:0 8px;">Retry</button>
-        <button id="nextBtn" style="margin:0 8px;">Next Level</button>
-        <button id="backBtn" style="margin:0 8px;">Back to Levels</button>
-      </div>
-    </div>
-  `;
-
-  document.body.appendChild(wrap);
-
-  // делаем кнопки рабочими
-  document.getElementById('retryBtn').onclick = () => window.location.reload();
-  document.getElementById('nextBtn').onclick = () => {
-    const next = parseInt(level, 10) + 1;
-    window.location.href = `panorama.html?level=${next}`;
-  };
-  document.getElementById('backBtn').onclick = () => {
-    window.location.href = 'levels.html';
-  };
-
-  // и показываем ачивку
-  showAchievement(`Level ${level} Complete!`, 'assets/icons/achv1.png');
-}
-
-// ===== 6) Старт уровня: таймер + обработчик клика по шарику
+// 8) Инициализация уровня
 function initLevel() {
+  document.getElementById('sky')
+          .setAttribute('src', `assets/panorama${level}.jpg`);
   startTimer();
-  const hot = document.getElementById('hotspot1');
-  hot.addEventListener('click', () => {
-    const elapsed = Math.floor((Date.now() - startTime) / 1000);
-    showCompletion(elapsed);
-  });
+  document.getElementById('hotspot1')
+    .addEventListener('click', () => {
+      const elapsed = Math.floor((Date.now() - startTime) / 1000);
+      showCompletion(elapsed);
+    });
 }
 
-// ждём полной загрузки
+// 9) Старт
 if (document.readyState === 'complete') {
   initLevel();
 } else {

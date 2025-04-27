@@ -1000,7 +1000,7 @@ main {
 /* Achievement UI */
 .achievement {
   position: fixed;
-  top: 300px;                 /* чуть ниже хедера */
+  top: 150px;                 /* чуть ниже хедера */
   left: 50%;
   transform: translateX(-50%) translateY(-10px); /* стартовая позиция чуть выше для анимации */
   z-index: 10000;            /* над всем остальным */
@@ -1032,4 +1032,24 @@ main {
 .achievement span {
   color: #333;
   font-weight: 500;
+}
+
+/* Скрывать элемент */
+.hidden {
+  display: none !important;
+}
+
+/* Пустое состояние */
+.empty-state {
+  text-align: center;
+  margin: 60px 0;
+  color: var(--text-light);
+}
+.empty-state p {
+  font-size: 1.2rem;
+  margin-bottom: 20px;
+}
+.empty-state .btn {
+  padding: 10px 20px;
+  font-size: 1rem;
 }

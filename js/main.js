@@ -1,93 +1,79 @@
 // js/main.js
 
-function loadHeader() {
-  return fetch('partials/header.html')
-    .then(res => {
-      if (!res.ok) throw new Error('Header not found');
-      return res.text();
-    })
-    .then(html => {
-      document.getElementById('header-placeholder').innerHTML = html;
-    });
+// 1) Загрузка шаблона шапки
+async function loadHeader() {
+  const res  = await fetch('partials/header.html');
+  if (!res.ok) throw new Error('Header not found');
+  const html = await res.text();
+  document.getElementById('header-placeholder').innerHTML = html;
 }
 
-function initAuth() {
+// 2) Инициализация авторизации и приветствия
+async function initAuthHeader() {
   const token        = localStorage.getItem('token');
-  const userName     = localStorage.getItem('userName');
   const signUpLink   = document.getElementById('signUpLink');
   const loginLink    = document.getElementById('loginLink');
   const logoutLink   = document.getElementById('logoutLink');
   const greetingElem = document.getElementById('greeting');
+  const progressLink = document.getElementById('progressLink');
 
-  if (token && userName) {
+  if (!token) {
+    // Не залогинены
+    signUpLink?.style.setProperty('display','inline-block');
+    loginLink?.style.setProperty('display','inline-block');
+    logoutLink?.style.setProperty('display','none');
+    greetingElem?.style.setProperty('display','none');
+    progressLink?.style.setProperty('display','none');
+    return;
+  }
+
+  // Есть токен — запрашиваем имя у сервера
+  try {
+    const res = await fetch('http://localhost:5000/api/auth/me', {
+      headers: { 'Authorization': 'Bearer ' + token }
+    });
+    if (!res.ok) throw new Error('Unauthorized');
+    const { name } = await res.json();
+
+    // Показываем залогиненое состояние
     signUpLink?.remove();
     loginLink?.remove();
-    logoutLink   && (logoutLink.style.display = 'inline-block');
-    greetingElem && ((greetingElem.textContent = `Hi, ${userName}`), greetingElem.style.display = 'inline-block');
-  } else {
-    loginLink  && (loginLink.style.display = 'inline-block');
-    signUpLink && (signUpLink.style.display = 'inline-block');
-    logoutLink && (logoutLink.style.display = 'none');
-    greetingElem && (greetingElem.style.display = 'none');
+    progressLink.style.setProperty('display','inline-block');
+    greetingElem.textContent     = `Hi, ${name}`;
+    greetingElem.style.display   = 'inline-block';
+    logoutLink.style.display     = 'inline-block';
+  } catch (err) {
+    // Токен невалиден — очищаем и редиректим
+    localStorage.removeItem('token');
+    window.location.href = 'login.html?error=auth';
   }
 
   logoutLink?.addEventListener('click', e => {
     e.preventDefault();
     localStorage.removeItem('token');
-    localStorage.removeItem('userName');
     window.location.reload();
   });
 }
 
+// 3) Кнопка «Start Therapy»
 function initStartTherapy() {
   const startBtn = document.getElementById('startTherapyBtn');
   startBtn?.addEventListener('click', () => {
-    const token = localStorage.getItem('token');
-    if (token) {
+    if (localStorage.getItem('token')) {
       window.location.href = 'levels.html';
     } else {
-      // Убираем alert, сразу редиректим с параметром ?error=auth
       window.location.href = 'login.html?error=auth';
     }
   });
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-  loadHeader()
-    .then(initAuth)
-    .then(initStartTherapy)
-    .catch(err => console.error('Error:', err));
-});
-
-function initAuth() {
-  const token        = localStorage.getItem('token');
-  const signUpLink   = document.getElementById('signUpLink');
-  const loginLink    = document.getElementById('loginLink');
-  const logoutLink   = document.getElementById('logoutLink');
-  const greetingElem = document.getElementById('greeting');
-  const progressLink = document.getElementById('progressLink'); 
-
-  if (token) {
-    signUpLink?.remove();
-    loginLink?.remove();
-    logoutLink.style.display   = 'inline-block';
-    greetingElem.textContent   = `Hi, ${localStorage.getItem('userName')}`;
-    greetingElem.style.display = 'inline-block';
-
-    progressLink.style.display = 'inline-block';
-  } else {
-    loginLink.style.display    = 'inline-block';
-    signUpLink.style.display   = 'inline-block';
-    logoutLink.style.display   = 'none';
-    greetingElem.style.display = 'none';
-
-    progressLink.style.display = 'none';
+// 4) Запуск
+document.addEventListener('DOMContentLoaded', async () => {
+  try {
+    await loadHeader();
+    await initAuthHeader();
+    initStartTherapy();
+  } catch (err) {
+    console.error('Header init error:', err);
   }
-
-  logoutLink?.addEventListener('click', e => {
-    e.preventDefault();
-    localStorage.removeItem('token');
-    localStorage.removeItem('userName');
-    window.location.reload();
-  });
-}
+});
