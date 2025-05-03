@@ -5,7 +5,6 @@
 /* Import Montserrat font from Google Fonts */
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600&display=swap");
 
-/* (Optional) CSS custom properties for colors and sizing */
 :root {
   /* Background */
   --bg-light:      #f4f1ea;    /* нежный бежевый фон */
@@ -69,7 +68,7 @@ html.is-changing .transition-fade {
 
    body::before {
     content: "";
-    position: fixed;      /* ← fixed вместо absolute */
+    position: fixed;  
     border-radius: 50%;
     z-index: -1;
     top: -100px;
@@ -438,11 +437,14 @@ main {
 
 .level img {
   width: 100%;
+  height: 160px;             
+  object-fit: cover;         
   display: block;
+  border-bottom: 1px solid var(--border-light);
 }
 
 .level h2 {
-  margin: 15px 0;
+  margin: 19px 0 8px;
   font-size: 1.5em;
   color: var(--accent);
 }
@@ -450,12 +452,148 @@ main {
 .level p {
   font-size: 1em;
   color: #555;
-  margin-bottom: 15px;
+  margin-bottom: 25px;
 }
 
 .level .btn {
-  margin-bottom: 15px;
+  margin-bottom: 25px;
 }
+
+/* ==========================================================================
+   14. LOCKED LEVELS OVERLAY
+   ========================================================================== */
+   .level {
+    position: relative;
+  }
+  
+  .level.locked {
+    opacity: 0.5;
+    pointer-events: none;
+  }
+  
+  .lock-overlay {
+    position: absolute;
+    inset: 0;                    
+    background: rgba(255,255,255,0.85);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    text-align: center;
+    border-radius: inherit;  
+  }
+  
+  .lock-overlay img {
+    width: 32px;
+    height: 32px;
+  }
+  
+  .lock-overlay span {
+    font-size: 0.9rem;
+    color: var(--text-dark);
+    font-weight: 500;
+  }
+
+/* ==========================================================================
+   13. LEVEL TIMER & OVERLAY
+   ========================================================================== */
+   .level-timer {
+    position: fixed;
+    top: calc(var(--header-height) + 16px);
+    right: 20px;
+    background: rgba(0,0,0,0.5);
+    color: #fff;
+    font-family: monospace;
+    padding: 6px 12px;
+    border-radius: 4px;
+    z-index: 1000;
+  }
+  .level-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+  }
+  
+  /* level-modal */
+  .level-modal {
+    background: #fff;
+    padding: 30px 40px;
+    border-radius: 12px;
+    text-align: center;
+    max-width: 320px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  }
+  .level-modal h2 {
+    margin-bottom: 12px;
+  }
+  .level-modal p {
+    margin-bottom: 20px;
+  }
+  .level-modal button {
+    margin: 0 6px;
+    padding: 8px 14px;
+    border: none;
+    border-radius: 6px;
+    background: var(--accent);
+    color: #fff;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .level-modal button:hover {
+    background: var(--accent-dark);
+  }
+
+  /* --------------------------------------------------------------------------
+   ACHIEVEMENT TOAST
+   -------------------------------------------------------------------------- */
+#ui-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 1001;
+}
+
+.achievement {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #fff;
+  padding: 12px 20px;
+  border-radius: 8px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.15);
+  font-size: 1rem;
+  opacity: 0;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  z-index: 1001;
+}
+
+.achievement.show {
+  opacity: 1;
+  transform: translate(-50%, -50%);
+}
+
+.achievement img {
+  width: 32px;
+  height: 32px;
+}
+
+.achievement span {
+  color: #333;
+  font-weight: 500;
+}
+  
 
 /* ==========================================================================
    13. AUTH PAGES (LOGIN & REGISTER)
@@ -518,7 +656,6 @@ main {
   width: 100%;
 }
 
-/* Overlay bubbles behind auth card */
 .page--auth::before {
   content: "";
   position: absolute;
@@ -588,300 +725,428 @@ main {
    AUTH FORMS: Login & Register Styling
    ================================================== */
 
-.page--auth {
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  padding: 100px 20px 60px;
-  background-color: var(--bg-light);
-}
+   .page--auth {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 100px 20px 60px;
+    background: var(--bg-light);
+  }
+  .page--auth::before,
+  .page--auth::after {
+    content: "";
+    position: absolute;
+  }
+  
+  .auth-card {
+    position: relative;
+    z-index: 1;
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.04);
+    padding: 40px 30px;
+    max-width: 380px;
+    width: 100%;
+    text-align: center;
+  }
+  
+  .auth-title {
+    font-size: 2rem;
+    color: var(--accent-dark);
+    margin-bottom: 24px;
+  }
+  
+  .field {
+    text-align: left;
+    margin-bottom: 20px;
+  }
+  .field span {
+    display: block;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--text-dark);
+    margin-bottom: 6px;
+  }
+  .field input {
+    width: 100%;
+    padding: 12px 14px;
+    font-size: 1rem;
+    color: var(--text-dark);
+    background: #fafafa;
+    border: 2px solid var(--border-light);
+    border-radius: 8px;
+    transition: border-color 0.2s;
+  }
+  .field input:focus {
+    outline: none;
+    border-color: var(--accent);
+    background: #fff;
+  }
+  
+  .auth-card .field input {
+    max-width: 350px;
+  }
+  
+  .btn--auth {
+    display: block;
+    width: 100%;
+    margin: 24px 0 12px;
+    padding: 12px;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #fff;
+    background: var(--accent);
+    border: none;
+    border-radius: 24px;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.1s;
+  }
+  .btn--auth:hover {
+    background: var(--accent-dark);
+    transform: translateY(-1px);
+  }
+  .btn--auth:active {
+    transform: translateY(0);
+  }
+  
+  .auth-footer {
+    font-size: 0.9rem;
+    color: var(--text-light);
+  }
+  .auth-footer a {
+    color: var(--accent-dark);
+    text-decoration: none;
+    font-weight: 500;
+  }
+  .auth-footer a:hover {
+    text-decoration: underline;
+  }
+  
+  .error-message {
+    display: none;
+    color: var(--accent-warn);
+    font-weight: 600;
+    margin: 8px 0 16px;
+    text-align: center;
+  }
+  
+  .field-hint {
+    display: block;
+    font-size: 0.85rem;
+    color: var(--text-light);
+    margin: 4px 0 0 4px;
+  }
 
-.auth-card {
-  background: #fff;
-  border-radius: 16px;
-  box-shadow: 0 8px 24px rgba(0,0,0,0.04);
-  padding: 40px 30px;
-  max-width: 380px;
-  width: 100%;
-  text-align: center;
-  position: relative;
-  z-index: 1;
-}
-
-.auth-card .field input {
-  width: 350px;
-}
-
-.auth-title {
-  font-family: "Montserrat", sans-serif;
-  font-size: 2rem;
-  color: var(--accent-dark);
-  margin-bottom: 24px;
-}
-
-.field {
-  margin-bottom: 20px;
-  text-align: left;
-}
-.field span {
-  display: block;
-  font-size: 0.9rem;
-  font-weight: 500;
-  color: var(--text-dark);
-  margin-bottom: 6px;
-}
-.field input {
-  width: 100%;
-  padding: 12px 14px;
-  font-size: 1rem;
-  color: var(--text-dark);
-  background: #fafafa;
-  border: 2px solid var(--border-light);
-  border-radius: 8px;
-  transition: border-color 0.2s;
-}
-.field input:focus {
-  outline: none;
-  border-color: var(--accent);
-  background: #fff;
-}
-
-.btn--auth {
-  display: block;
-  width: 100%;
-  margin: 24px 0 12px;
-  padding: 12px;
-  font-size: 1rem;
-  font-weight: 600;
-  color: #fff;
-  background-color: var(--accent);
-  border: none;
-  border-radius: 24px;
-  cursor: pointer;
-  transition: background-color 0.2s, transform 0.1s;
-}
-.btn--auth:hover {
-  background-color: var(--accent-dark);
-  transform: translateY(-1px);
-}
-.btn--auth:active {
-  transform: translateY(0);
-}
-
-.auth-footer {
-  font-size: 0.9rem;
-  color: var(--text-light);
-}
-.auth-footer a {
-  color: var(--accent-dark);
-  text-decoration: none;
-  font-weight: 500;
-}
-.auth-footer a:hover {
-  text-decoration: underline;
-}
-
-.page--auth::before {
-  content: "";
-  position: absolute;
-}
-.page--auth::after {
-  content: "";
-  position: absolute;
-}
-
-.error-message {
-  display: none;
-  color: var(--accent-warn);
-  font-weight: 600;
-  margin: 8px 0 16px;
-  text-align: center;
-}
-
-.field-hint {
-  font-size: 0.85rem;
-  color: var(--text-light);
-  margin-top: 4px;
-  margin-left: 4px;
-}
-
-/* ABOUT PROJECT */
-
+  /* ==========================================================================
+   9. ABOUT PROJECT
+   ========================================================================== */
 .about {
   background: #fff;
-  padding: 40px 20px;
+  padding: 10px 60px;
   margin: 40px auto;
-  max-width: 800px;
+  max-width: 900px;
   border-radius: 10px;
   box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-  text-align: center;
+  overflow: hidden;
 }
-.about h2 {
-  color: var(--accent);
-  margin-bottom: 20px;
-  font-size: 2em;
-}
-.about p {
-  color: var(--text-dark);
-  line-height: 1.6;
-  margin-bottom: 16px;
-}
-
 .about-container {
   display: flex;
-  align-items: center;
-  gap: 40px;
-  max-width: 1200px;
+  flex-wrap: wrap;
+  gap: 35px;
+  max-width: 1300px;
   margin: 0 auto;
-  flex-wrap: wrap; 
+  align-items: center;
+  justify-content: center;
 }
-
-.about-text {
-  flex: 1 1 400px; 
-}
-
+.about-text,
 .about-image {
-  flex: 0 0 300px; 
-  text-align: center;
+  opacity: 0;
+  transform: translateY(30px);
+  animation: fadeInUp .6s ease forwards;
 }
-
+.about-text {
+  flex: 1 1 400px;
+  animation-delay: 0.4s;
+}
+.about-text h2 {
+  text-align: center;
+  margin: 12px 0 8px;
+  color: var(--accent);
+}
+.about-image {
+  flex: 0 0 300px;
+  text-align: center;
+  animation-delay: 0.6s;
+}
 .about-image img {
   max-width: 100%;
-  height: auto;
   border-radius: 10px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
 
-/* PROGRESS */
+/* ========================================================================== 
+   PROGRESS
+   ========================================================================== */
+   .page--progress {
+  background: #f4f1ea;
+  padding: 60px 20px;
+}
 
-.progress {
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 40px 20px;
+/* GRID: overview + attempts */
+.progress-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 40px;
+  margin-bottom: 60px;
+}
+
+/* CARD BASE */
+.progress-container .card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+}
+
+/* ========================================================================== 
+   PROGRESS PAGE 
+   ========================================================================== */
+   .page--progress {
+    background: #f4f1ea;
+    padding: 60px 20px;
+    animation: fadeInUp .6s ease;
+  }
+  
+  .page--progress .page-title {
+    text-align: center;
+    font-size: 2.5rem;
+    color: var(--accent);
+    margin-bottom: 40px;
+  }
+  
+  /* ========================================================================== 
+     GRID LAYOUT 
+     ========================================================================== */
+  .progress-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 40px;
+    margin-bottom: 60px;
+  }
+  
+  /* ========================================================================== 
+     CARD BASE 
+     ========================================================================== */
+  .progress-container .card {
+    background: #fff;
+    border-radius: 24px;
+    box-shadow: 0 16px 40px rgba(47, 187, 194, 0.2),
+                0 1px 3px rgba(0, 0, 0, 0.05);
+    /* единый padding */
+    padding: 20px 24px 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+  }
+  
+  .overview-card .overview-title,
+  .attempts-card .attempts-title {
+    margin: 0;                
+    padding: 16px 0 24px;    
+    width: 100%;
+    font-weight: 600;
+    color: var(--text-dark);
+    text-align: center;
+    height: 60px;
+  }
+  
+  /* ========================================================================== 
+     OVERVIEW CARD 
+     ========================================================================== */ 
+  /* кольцевой прогресс */
+  .radial-progress {
+    width: 200px;
+    height: 200px;
+    margin: 0 auto;
+    position: relative;
+  }
+  
+  .radial-progress svg {
+    width: 100%;
+    height: 100%;
+    transform: rotate(-90deg);
+  }
+  
+  .ring-bg,
+  .ring {
+    fill: none;
+    stroke-width: 20;
+  }
+  
+  .ring-bg {
+    stroke: #EEEEEE;
+  }
+  
+  .ring {
+    stroke: var(--accent);
+    stroke-linecap: round;
+    stroke-dasharray: 565; /* пример: 2π·90≈565 */
+    stroke-dashoffset: calc(565 - (565 * var(--completed) / var(--total)));
+    transition: stroke-dashoffset 1s ease-out;
+  }
+  
+  .progress-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+  }
+  
+  /* Поднимем внутрянку на 10px */
+  .progress-content .num {
+    font-size: 2rem;
+    font-weight: 600;
+    color: var(--accent-dark);
+    margin-bottom: 10px;   /* <- новый отступ */
+  }
+  
+  
+  
+  /* ========================================================================== 
+     ATTEMPTS CARD 
+     ========================================================================== */
+  .attempts-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+  }
+  
+  .attempts-list li {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--border-light);
+    font-size: 0.95rem;
+  }
+  
+  .attempts-list li:last-child {
+    border-bottom: none;
+  }
+  
+  .attempts-list .icon {
+    font-size: 1.2rem;
+    color: var(--accent);
+  }
+  
+  .attempts-list small {
+    margin-left: auto;
+    font-size: 0.8rem;
+    color: var(--text-light);
+  }
+  
+  /* ========================================================================== 
+     UTILITIES 
+     ========================================================================== */
+  .hidden {
+    display: none !important;
+  }
+  
+
+/* ============= ACHIEVEMENTS ============= */
+.achievements-section {
+  max-width: 1200px;
+  margin: 0 auto 80px;
   text-align: center;
 }
-#progress-overview {
-  font-size: 1.1rem;
+.achievements-section .section-title {
+  font-size: 2rem;
+  color: var(--accent);
   margin-bottom: 24px;
 }
-#progress-chart {
-  max-width: 100%;
-  height: 300px;
+.achievements-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 24px;
 }
-/* контейнер-оверлей */
-.modal {
+.achievement-card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  text-align: center;
+}
+.achievement-card img {
+  width: 48px; height: 48px;
+  margin-bottom: 12px;
+}
+.achievement-card h3 {
+  font-size: 1.1rem;
+  color: var(--accent-dark);
+  margin-bottom: 8px;
+}
+.achievement-card p {
+  font-size: 0.9rem;
+  color: var(--text-light);
+  margin-bottom: 8px;
+}
+.achievement-card small {
+  font-size: 0.75rem;
+  color: var(--text-light);
+}
+
+/* =============== UTILITIES =============== */
+.hidden { display: none !important; }
+  
+  
+/* ==========================================================================
+   11. PANORAMA UI
+   ========================================================================== */
+#ui-container {
   position: fixed;
-  top: 0; left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: rgba(0, 0, 0, 0.4);
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  inset: 0;
+  pointer-events: none;
   z-index: 999;
 }
-
-/* скрывать */
-.modal.hidden {
-  display: none;
-}
-
-/* само окно */
-.modal-content {
-  background: #fff;
-  padding: 24px 32px;
-  border-radius: 8px;
-  text-align: center;
-  max-width: 90%;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-}
-
-/* кнопки внизу */
-.modal-content .buttons {
-  margin-top: 16px;
-}
-
-.modal-content button {
-  margin: 0 8px;
-  padding: 8px 16px;
-  border: none;
-  border-radius: 4px;
-  background: var(--accent);
-  color: #fff;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background-color 0.2s;
-}
-
-.modal-content button:hover {
-  background: var(--accent-dark);
-}
-
-/* Счётчик времени */
-.level-timer {
+.achievement {
   position: fixed;
-  top: 80px;              /* чуть ниже шапки */
-  right: 20px;
-  background: rgba(0, 0, 0, 0.5);
-  color: #fff;
-  font-size: 1.1rem;
-  padding: 8px 12px;
-  border-radius: 8px;
-  font-family: "Montserrat", sans-serif;
-  z-index: 1000;
-}
-
-/* Оверлей */
-.level-overlay {
-  position: fixed;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background: rgba(0,0,0,0.6);
+  top: 150px;
+  left: 50%;
+  transform: translateX(-50%) translateY(-10px);
   display: flex;
   align-items: center;
-  justify-content: center;
-  z-index: 2000;
-}
-
-/* Окно модалки */
-.level-modal {
+  gap: 16px;
+  padding: 16px 24px;
   background: #fff;
-  padding: 30px 40px;
-  border-radius: 12px;
-  text-align: center;
-  max-width: 320px;
+  border-radius: 8px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.15);
+  font-size: 1.25rem;
+  opacity: 0;
+  transition: opacity 0.3s, transform 0.3s;
+  z-index: 10000;
 }
-.level-modal h2 {
-  margin: 0 0 12px;
+.achievement.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
 }
-.level-modal p {
-  margin: 0 0 20px;
-}
-.level-modal button {
-  margin: 0 6px;
-  padding: 8px 14px;
-  border: none;
-  border-radius: 6px;
-  background: var(--accent);
-  color: #fff;
-  cursor: pointer;
-}
-.level-modal button:hover {
-  background: var(--accent-dark);
-}
-
 .badge-toast {
   position: fixed;
   bottom: 20px;
   right: 20px;
-  background: var(--accent-dark);
-  color: #fff;
-  padding: 10px 14px;
-  border-radius: 30px;
   display: flex;
   align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  background: var(--accent-dark);
+  color: #fff;
+  border-radius: 30px;
   opacity: 0;
   transform: translateY(20px);
-  transition: all .3s ease;
+  transition: all 0.3s ease;
   z-index: 2000;
 }
 .badge-toast.visible {
@@ -894,162 +1159,61 @@ main {
   margin-right: 8px;
 }
 
-/* Модальное окно */
+/* ==========================================================================
+   12. COMPLETION MODAL
+   ========================================================================== */
 #completionModal .modal-overlay {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0,0,0,0.6);
-  z-index: 1000;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  z-index: 999;
 }
-
 #completionModal .modal-content {
   position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   background: #fff;
-  padding: 30px 40px;
-  border-radius: 12px;
-  box-shadow: 0 2px 12px rgba(0,0,0,0.3);
-  z-index: 1001;
-  text-align: center;
-  max-width: 90%;
-}
-
-#completionModal .modal-content h2 {
-  margin-top: 0;
-}
-
-#completionModal .modal-content button {
-  margin: 12px 8px 0;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  background: var(--accent);
-  color: #fff;
-  font-weight: 600;
-  transition: background .2s;
-}
-
-#completionModal .modal-content button:hover {
-  background: var(--accent-dark);
-}
-
-/* Таймер */
-.level-timer {
-  position: fixed;
-  top: 80px;
-  right: 20px;
-  background: rgba(0,0,0,0.5);
-  color: #fff;
-  padding: 6px 12px;
-  border-radius: 4px;
-  font-family: monospace;
-  z-index: 1000;
-}
-
-/* Модальное окно */
-#completionModal .modal-overlay {
-  position: fixed; inset: 0;
-  background: rgba(0,0,0,0.6);
-  z-index: 999;
-}
-#completionModal .modal-content {
-  position: fixed;
-  top: 50%; left: 50%;
-  transform: translate(-50%, -50%);
-  background: #fff;
   padding: 2rem;
   border-radius: 8px;
   box-shadow: 0 8px 24px rgba(0,0,0,0.2);
   text-align: center;
+  width: 90%;
+  max-width: 400px;
   z-index: 1000;
-  width: 90%; max-width: 400px;
 }
 #completionModal .modal-buttons {
   margin-top: 1.5rem;
-  display: flex; justify-content: space-around;
+  display: flex;
+  justify-content: space-around;
 }
 #completionModal button {
+  padding: 0.6rem 1.2rem;
+  border: none;
+  border-radius: 4px;
   background: var(--accent);
   color: #fff;
-  border: none;
-  padding: 0.6rem 1.2rem;
-  border-radius: 4px;
-  cursor: pointer;
   font-weight: 600;
+  cursor: pointer;
   transition: background 0.2s;
 }
 #completionModal button:hover {
   background: var(--accent-dark);
 }
 
-/* 1) контейнер под все динамические UI-элементы */
-#ui-container {
-  position: fixed;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  pointer-events: none; /* мышь «пролетает» мимо, не блокируем сцену */
-  z-index: 999;
-}
 
-/* Achievement UI */
-.achievement {
-  position: fixed;
-  top: 150px;                 /* чуть ниже хедера */
-  left: 50%;
-  transform: translateX(-50%) translateY(-10px); /* стартовая позиция чуть выше для анимации */
-  z-index: 10000;            /* над всем остальным */
-  display: flex;
-  align-items: center;
-  gap: 16px;                 /* расстояние между иконкой и текстом */
-  background: #fff;
-  padding: 16px 24px;        /* увеличенный padding */
-  border-radius: 8px;
-  box-shadow: 0 6px 18px rgba(0,0,0,0.15);
-  font-size: 1.25rem;        /* чуть крупнее */
-  opacity: 0;
-  transition: opacity 0.3s ease, transform 0.3s ease;
-}
-
-/* Когда добавлен класс .show — показываем и спускаем вниз */
-.achievement.show {
-  opacity: 1;
-  transform: translateX(-50%) translateY(0);
-}
-
-/* Стили для самой иконки */
-.achievement img {
-  width: 48px;
-  height: 48px;
-}
-
-/* Стили для текста */
-.achievement span {
-  color: #333;
-  font-weight: 500;
-}
-
-/* Скрывать элемент */
+/* ==========================================================================
+   14. UTILITIES
+   ========================================================================== */
 .hidden {
   display: none !important;
 }
-
-/* Пустое состояние */
 .empty-state {
   text-align: center;
-  margin: 60px 0;
+  padding: 20px;
   color: var(--text-light);
 }
 .empty-state p {
   font-size: 1.2rem;
   margin-bottom: 20px;
-}
-.empty-state .btn {
-  padding: 10px 20px;
-  font-size: 1rem;
 }

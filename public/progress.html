@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Progress</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <div id="header-placeholder"></div>
+
+  <main class="page--progress">
+    <h1 class="page-title">Your progress</h1>
+
+    <div class="progress-container">
+
+      <div class="card overview-card">
+        <h2 class="overview-title">Levels Completed</h2>
+
+        <div class="radial-progress">
+          <svg viewBox="0 0 200 200">
+            <circle class="ring-bg"
+                    cx="100" cy="100" r="90" />
+            <circle class="ring"
+                    cx="100" cy="100" r="90" />
+          </svg>
+          <div class="progress-content">
+            <span class="num">0</span>
+            <span class="of">out of 6</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card attempts-card">
+        <h2 class="attempts-title">Recent Attempts</h2>
+        <ul class="attempts-list">
+        </ul>
+      </div>
+
+    </div>
+
+    <section class="achievements-section">
+      <h2 class="section-title">Your Achievements</h2>
+      <div class="achievements-grid">
+      </div>
+    </section>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="js/main.js" defer></script>
+  <script src="js/progress.js" defer></script>
+</body>
+</html>

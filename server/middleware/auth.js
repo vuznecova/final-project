@@ -1,21 +1,27 @@
 // server/middleware/auth.js
-
+require('dotenv').config();
 const jwt = require('jsonwebtoken');
-const JWT_SECRET = process.env.JWT_SECRET || 'your_jwt_secret_here';
+const JWT_SECRET = process.env.JWT_SECRET || '5f8d9a8f7d6a3b2c1e0f';
 
-module.exports = function authMiddleware(req, res, next) {
+module.exports = (req, res, next) => {
+  // 1) Проверяем наличие заголовка
   const authHeader = req.headers.authorization;
-  if (!authHeader) {
-    return res.status(401).json({ error: 'No authorization header' });
+  if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    return res.status(401).json({ error: 'Authentication required' });
   }
-  const [scheme, token] = authHeader.split(' ');
-  if (!/^Bearer$/i.test(scheme) || !token) {
-    return res.status(401).json({ error: 'Malformed authorization header' });
-  }
-  jwt.verify(token, JWT_SECRET, (err, decoded) => {
-    if (err) return res.status(401).json({ error: 'Invalid token' });
-    // decoded → { id: ..., name: ..., iat: ..., exp: ... }
-    req.user = decoded;
+
+  // 2) Извлекаем и верифицируем токен
+  const token = authHeader.split(' ')[1];
+  try {
+    const payload = jwt.verify(token, JWT_SECRET);
+
+    // 3) Сохраняем идентификатор пользователя в req.userId
+    req.user  = payload;
+    req.userId = payload.id;
+
     next();
-  });
+  } catch (err) {
+    console.error('[Auth] token error:', err);
+    return res.status(401).json({ error: 'Invalid token' });
+  }
 };

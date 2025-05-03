@@ -2,31 +2,44 @@
 
 const express = require('express');
 const router  = express.Router();
-const db      = require('../db/knex');
 const auth    = require('../middleware/auth');
+const db      = require('../db/knex');
 
-router.post('/', auth, async (req, res) => {
+// GET  /api/progress — получить весь прогресс текущего юзера
+router.get('/', auth, async (req, res) => {
   try {
-    const userId   = req.user.id;           // теперь определён
-    const { level, duration } = req.body;
+    const rows = await db('progress')
+      .where({ user_id: req.userId })
+      .orderBy('completed_at', 'asc');
+    const data = rows.map(r => ({
+      level:        r.level,
+      time_taken:   r.time_taken,
+      completed_at: r.completed_at
+    }));
+    res.json(data);
+  } catch (err) {
+    console.error('GET /api/progress error:', err);
+    res.status(500).json({ error: 'Server error' });
+  }
+});
 
-    if (level == null || duration == null) {
-      return res.status(400).json({ error: 'Level and duration required' });
-    }
-
+// POST /api/progress — записать новый результат
+router.post('/', auth, async (req, res) => {
+  const { level, time_taken } = req.body;
+  if (level == null || time_taken == null) {
+    return res.status(400).json({ error: 'Level and time_taken required' });
+  }
+  try {
     await db('progress').insert({
-      user_id:     userId,
-      level:       parseInt(level,    10),
-      time_taken:  parseInt(duration, 10),
-      anxiety_rating: 0
-      // completed_at заполняется автоматически в БД
+      user_id:      req.userId,
+      level,
+      time_taken,
+      completed_at: new Date()
     });
-
     res.json({ success: true });
   } catch (err) {
-    console.error('DB insert error:', err);
-    // во время разработки шлём полное сообщение
-    res.status(500).json({ error: err.message, stack: err.stack });
+    console.error('POST /api/progress error:', err);
+    res.status(500).json({ error: 'Server error' });
   }
 });
 
