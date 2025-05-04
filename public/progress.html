@@ -12,37 +12,38 @@
   <main class="page--progress">
     <h1 class="page-title">Your progress</h1>
 
-    <div class="progress-container">
+    <!-- Пустое состояние -->
+<div id="no-progress" hidden>
+  <p>You haven't completed any level yet.</p>
+  <a href="/levels.html" class="btn">Start now</a>
+</div>
 
-      <div class="card overview-card">
-        <h2 class="overview-title">Levels Completed</h2>
-
-        <div class="radial-progress">
-          <svg viewBox="0 0 200 200">
-            <circle class="ring-bg"
-                    cx="100" cy="100" r="90" />
-            <circle class="ring"
-                    cx="100" cy="100" r="90" />
-          </svg>
-          <div class="progress-content">
-            <span class="num">0</span>
-            <span class="of">out of 6</span>
-          </div>
-        </div>
+<!-- Основной блок с карточками -->
+<div id="progress-content" hidden class="progress-container">
+  <div class="card overview-card">
+    <h2 class="overview-title">Levels Completed</h2>
+    <div class="radial-progress">
+      <svg viewBox="0 0 200 200">
+        <circle class="ring-bg" cx="100" cy="100" r="90" />
+        <circle class="ring" cx="100" cy="100" r="90" />
+      </svg>
+      <div class="progress-content">
+        <span class="num">0</span>
+        <span class="of">out of 6</span>
       </div>
-
-      <div class="card attempts-card">
-        <h2 class="attempts-title">Recent Attempts</h2>
-        <ul class="attempts-list">
-        </ul>
-      </div>
-
     </div>
+  </div>
 
-    <section class="achievements-section">
+  <div class="card attempts-card">
+    <h2 class="attempts-title">Recent Attempts</h2>
+    <ul class="attempts-list"></ul>
+  </div>
+</div>
+
+    <!-- Достижения -->
+    <section id="achievements-section" class="achievements-section" hidden>
       <h2 class="section-title">Your Achievements</h2>
-      <div class="achievements-grid">
-      </div>
+      <div class="achievements-grid"></div>
     </section>
   </main>
 

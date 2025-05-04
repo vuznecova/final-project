@@ -13,7 +13,8 @@ app.use(express.json());
 
 // 2) Маршруты API — только относительные пути!
 app.use('/api/auth', authRouter);
-app.use('/api/progress', authMiddleware, progressRouter);
+app.use('/api/progress', progressRouter);
+
 
 // 3) Раздаём фронтенд из папки public (один и тот же источник)
 app.use(
