@@ -1,5 +1,3 @@
-// server/routes/auth.js
-
 require('dotenv').config();
 const express = require('express');
 const router  = express.Router();
@@ -8,7 +6,6 @@ const bcrypt  = require('bcrypt');
 const db      = require('../db/knex');
 const authMiddleware = require('../middleware/auth');
 
-// Секрет для подписи и проверки JWT
 const JWT_SECRET = process.env.JWT_SECRET || '5f8d9a8f7d6a3b2c1e0f';
 
 // POST /api/auth/register
@@ -85,7 +82,7 @@ router.post('/login', async (req, res) => {
   }
 });
 
-// GET /api/auth/me — возвращает данные текущего пользователя по JWT
+// GET /api/auth/me
 router.get(
   '/me',
   authMiddleware,

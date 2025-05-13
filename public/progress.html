@@ -1,54 +1,76 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Progress</title>
-  <link rel="stylesheet" href="css/style.css" />
-</head>
-<body>
-  <div id="header-placeholder"></div>
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0"
+    />
+    <title>Your Progress</title>
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <div id="header-placeholder"></div>
 
-  <main class="page--progress">
-    <h1 class="page-title">Your progress</h1>
+    <main class="page--progress">
+      <h1 class="page-title">Your Progress</h1>
 
-    <!-- Пустое состояние -->
-<div id="no-progress" hidden>
-  <p>You haven't completed any level yet.</p>
-  <a href="/levels.html" class="btn">Start now</a>
-</div>
-
-<!-- Основной блок с карточками -->
-<div id="progress-content" hidden class="progress-container">
-  <div class="card overview-card">
-    <h2 class="overview-title">Levels Completed</h2>
-    <div class="radial-progress">
-      <svg viewBox="0 0 200 200">
-        <circle class="ring-bg" cx="100" cy="100" r="90" />
-        <circle class="ring" cx="100" cy="100" r="90" />
-      </svg>
-      <div class="progress-content">
-        <span class="num">0</span>
-        <span class="of">out of 6</span>
+      <!-- No progress yet -->
+      <div id="no-progress" hidden>
+        <p>You haven’t completed any levels yet.</p>
+        <a href="levels.html" class="btn">Start now</a>
       </div>
-    </div>
-  </div>
 
-  <div class="card attempts-card">
-    <h2 class="attempts-title">Recent Attempts</h2>
-    <ul class="attempts-list"></ul>
-  </div>
-</div>
+      <!-- Progress overview + recent attempts -->
+      <div
+        id="progress-content"
+        class="progress-container"
+        hidden
+      >
+        <!-- Overview card -->
+        <div class="card overview-card">
+          <h2 class="overview-title">Levels Completed</h2>
+          <div class="radial-progress">
+            <svg viewBox="0 0 200 200">
+              <circle
+                class="ring-bg"
+                cx="100"
+                cy="100"
+                r="90"
+              />
+              <circle
+                class="ring"
+                cx="100"
+                cy="100"
+                r="90"
+              />
+            </svg>
+            <div class="progress-content">
+              <span class="num">0</span>
+              <span class="of">out of 6</span>
+            </div>
+          </div>
+        </div>
 
-    <!-- Достижения -->
-    <section id="achievements-section" class="achievements-section" hidden>
-      <h2 class="section-title">Your Achievements</h2>
-      <div class="achievements-grid"></div>
-    </section>
-  </main>
+        <!-- Recent attempts card -->
+        <div class="card attempts-card">
+          <h2 class="attempts-title">Recent Attempts</h2>
+          <ul class="attempts-list"></ul>
+        </div>
+      </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <script src="js/main.js" defer></script>
-  <script src="js/progress.js" defer></script>
-</body>
+      <!-- Achievements section (unchanged) -->
+      <section
+        id="achievements-section"
+        class="achievements-section"
+        hidden
+      >
+        <h2 class="section-title">Your Achievements</h2>
+        <div class="achievements-grid"></div>
+      </section>
+    </main>
+
+    <script src="js/main.js" defer></script>
+    <script src="js/progress.js" defer></script>
+  </body>
 </html>

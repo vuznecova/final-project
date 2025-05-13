@@ -1,37 +1,39 @@
 <!DOCTYPE html>
-<html lang="ru">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Panorama</title>
-    <script src="https://aframe.io/releases/1.3.0/aframe.min.js"></script>
-    <link rel="stylesheet" href="css/style.css" />
-  </head>
-  <body>
-    <div id="header-placeholder"></div>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Find Objects Level</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="css/style.css" />
+  <script src="https://aframe.io/releases/1.3.0/aframe.min.js"></script>
+  <script src="https://unpkg.com/aframe-look-at-component@0.8.0/dist/aframe-look-at-component.min.js"></script>
+</head>
+<body>
+  <div id="ui-container">
+    <button id="backBtn" class="ui-back">Back</button>
+    <div class="ui-panel">
+      <div class="ui-task">
+        Find <span id="totalObjects">0</span> objects
+      </div>
+      <div class="ui-progress">
+        <div id="progressFill" class="ui-progress__fill"></div>
+      </div>
+      <div id="progressCount" class="ui-count">0 / 0</div>
+    </div>
+    <div id="levelTimer" class="ui-timer">00:00</div>
+  </div>
 
-    <!-- Таймер -->
-    <div id="levelTimer" class="level-timer">00:00</div>
+  <a-scene id="scene">
+    <a-sky id="skyEl" src="" rotation="0 -90 0"></a-sky>
+      <a-entity camera look-controls position="0 1.6 0">
+          <a-cursor
+            cursor="rayOrigin: mouse; fuse: false"
+            raycaster="objects: .click-target"
+            material="shader: flat; color: white">
+          </a-cursor>
+        </a-entity>
+  </a-scene>
 
-    <!-- Сцена -->
-    <a-scene id="scene" cursor="rayOrigin: mouse">
-      <a-sky id="sky" src="" rotation="0 -130 0"></a-sky>
-      <a-entity
-        id="hotspot1"
-        class="clickable"
-        geometry="primitive: circle; radius: 0.5"
-        material="color: #FF0000; opacity: 0.8"
-        position="0 1.6 -3"
-      ></a-entity>
-      <a-entity camera look-controls>
-        <a-cursor fuse="false" material="shader: flat; color: white"></a-cursor>
-      </a-entity>
-    </a-scene>
-
-    <!-- Пустой контейнер под динамические модалки и ачивки -->
-    <div id="ui-container"></div>
-
-    <script src="js/main.js" defer></script>
-    <script src="js/panorama.js" defer></script>
-  </body>
+  <script src="js/panorama.js"></script>
+</body>
 </html>
