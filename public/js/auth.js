@@ -60,8 +60,8 @@
 
   if (loginForm) {
     loginForm.addEventListener('submit', async e => {
-      e.preventDefault();                  // предотвращаем перезагрузку
-      loginError.style.display = 'none';   // скрываем прошлые ошибки
+      e.preventDefault();                  
+      loginError.style.display = 'none'; 
       loginError.textContent   = '';
 
       const email    = e.target.email.value.trim();
@@ -93,7 +93,6 @@
         const payload = JSON.parse(atob(token.split('.')[1]));
         localStorage.setItem('userName', payload.name);
 
-        // Переходим на страницу уровней
         window.location.href = 'levels.html';
       } catch (err) {
         console.error(err);

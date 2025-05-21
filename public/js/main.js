@@ -1,6 +1,3 @@
-// js/main.js
-
-// 1) Загрузка шаблона шапки
 async function loadHeader() {
   const res  = await fetch('partials/header.html');
   if (!res.ok) throw new Error('Header not found');
@@ -8,7 +5,6 @@ async function loadHeader() {
   document.getElementById('header-placeholder').innerHTML = html;
 }
 
-// 2) Инициализация авторизации и приветствия
 async function initAuthHeader() {
   const token        = localStorage.getItem('token');
   const signUpLink   = document.getElementById('signUpLink');
@@ -18,7 +14,6 @@ async function initAuthHeader() {
   const progressLink = document.getElementById('progressLink');
 
   if (!token) {
-    // Не залогинены
     signUpLink?.style.setProperty('display','inline-block');
     loginLink?.style.setProperty('display','inline-block');
     logoutLink?.style.setProperty('display','none');
@@ -27,7 +22,6 @@ async function initAuthHeader() {
     return;
   }
 
-  // Есть токен — запрашиваем имя у сервера
   try {
     const res = await fetch('http://localhost:5000/api/auth/me', {
       headers: { 'Authorization': 'Bearer ' + token }
@@ -35,7 +29,6 @@ async function initAuthHeader() {
     if (!res.ok) throw new Error('Unauthorized');
     const { name } = await res.json();
 
-    // Показываем залогиненое состояние
     signUpLink?.remove();
     loginLink?.remove();
     progressLink.style.setProperty('display','inline-block');
@@ -43,7 +36,6 @@ async function initAuthHeader() {
     greetingElem.style.display   = 'inline-block';
     logoutLink.style.display     = 'inline-block';
   } catch (err) {
-    // Токен невалиден — очищаем и редиректим
     localStorage.removeItem('token');
     window.location.href = 'login.html?error=auth';
   }
@@ -55,7 +47,6 @@ async function initAuthHeader() {
   });
 }
 
-// 3) Кнопка «Start Therapy»
 function initStartTherapy() {
   const startBtn = document.getElementById('startTherapyBtn');
   startBtn?.addEventListener('click', () => {
@@ -67,7 +58,6 @@ function initStartTherapy() {
   });
 }
 
-// 4) Запуск
 document.addEventListener('DOMContentLoaded', async () => {
   try {
     await loadHeader();

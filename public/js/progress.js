@@ -5,7 +5,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     return;
   }
 
-  // Elements
   const noProgressEl = document.getElementById("no-progress");
   const progressEl   = document.getElementById("progress-content");
   const numEl        = document.querySelector(".overview-card .num");
@@ -16,7 +15,6 @@ document.addEventListener("DOMContentLoaded", async () => {
   const achGrid      = document.querySelector(".achievements-grid");
 
   try {
-    // 1. Fetch progress
     const res = await fetch("/api/progress", {
       headers: { Authorization: `Bearer ${token}` }
     });
@@ -29,20 +27,15 @@ document.addEventListener("DOMContentLoaded", async () => {
     achSection.hidden          = !hasProgress;
 
     if (hasProgress) {
-      // 2. Overview
       const totalLevels = 6;
       const completed   = new Set(progress.map(p => p.level)).size;
       numEl.textContent = completed;
       ofEl.textContent  = `out of ${totalLevels}`;
-
-      // Draw circle
       const radius        = ring.r.baseVal.value;
       const circumference = 2 * Math.PI * radius;
       ring.style.strokeDasharray  = `${circumference}`;
       ring.style.strokeDashoffset = 
         `${circumference - (completed / totalLevels) * circumference}`;
-
-      // 3. Recent attempts (up to 5), include anxiety rating
       attemptsList.innerHTML = "";
       progress
         .filter(p => p.completed_at)
@@ -62,7 +55,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     achSection.hidden          = true;
   }
 
-  // ===== Achievements (unchanged) =====
   try {
     const res = await fetch("/api/progress/achievements", {
       headers: {

@@ -8,8 +8,16 @@ router.post("/", authMiddleware, async (req, res) => {
   const userId = req.user.id;
   const { level, time_taken, anxiety_rating } = req.body;
 
+  // 💥 добавили валидацию:
+  if (
+    typeof level !== 'number' || level < 1 || level > 6 ||
+    typeof time_taken !== 'number' || time_taken < 0 ||
+    typeof anxiety_rating !== 'number' || anxiety_rating < 0 || anxiety_rating > 10
+  ) {
+    return res.status(400).json({ error: 'Invalid progress data' });
+  }
+
   try {
-    // 1) Сохраняем прогресс
     await knex("progress").insert({
       user_id: userId,
       level,
@@ -18,25 +26,21 @@ router.post("/", authMiddleware, async (req, res) => {
       completed_at: new Date()
     });
 
-    // 2) Текущий прогресс пользователя
+
     const progress = await knex("progress")
       .where({ user_id: userId })
       .whereNotNull("completed_at");
 
-    // 3) Уже выданные ачивки
     const userAchievements = await knex("user_achievements")
       .where({ user_id: userId })
       .pluck("type_id");
     const issued = new Set(userAchievements);
 
-    // 4) Вся коллекция типов ачивок
     const allTypes = await knex("achievement_types").select("*");
     const typeMap = Object.fromEntries(allTypes.map(a => [a.code, a]));
 
     const toInsert = [];
 
-    // ——————————————————————————————————————————
-    // 5) Ачивки за прохождение уровней lvlX_complete
     for (let i = 1; i <= 6; i++) {
       const code = `lvl${i}_complete`;
       const has = progress.some(p => p.level === i);
@@ -48,36 +52,21 @@ router.post("/", authMiddleware, async (req, res) => {
       }
     }
 
-    // ——————————————————————————————————————————
-    // 6) Speed Runner: любой уровень ≤ 30 секунд
     const fast = progress.find(p => p.time_taken !== null && p.time_taken <= 30);
-    if (
-      fast &&
-      typeMap["speed_runner"] &&
-      !issued.has(typeMap["speed_runner"].id)
-    ) {
+    if (fast && typeMap["speed_runner"] && !issued.has(typeMap["speed_runner"].id)) {
       toInsert.push({
         user_id: userId,
         type_id: typeMap["speed_runner"].id
       });
     }
 
-    // ——————————————————————————————————————————
-    // 7) Consistency Champ: 3 разных уровня подряд
     const sorted = [...progress].sort(
       (a, b) => new Date(a.completed_at) - new Date(b.completed_at)
     );
     for (let i = 0; i <= sorted.length - 3; i++) {
       const [l1, l2, l3] = [sorted[i], sorted[i + 1], sorted[i + 2]];
-      const distinct =
-        l1.level !== l2.level &&
-        l2.level !== l3.level &&
-        l1.level !== l3.level;
-      if (
-        distinct &&
-        typeMap["consistency_champ"] &&
-        !issued.has(typeMap["consistency_champ"].id)
-      ) {
+      const distinct = l1.level !== l2.level && l2.level !== l3.level && l1.level !== l3.level;
+      if (distinct && typeMap["consistency_champ"] && !issued.has(typeMap["consistency_champ"].id)) {
         toInsert.push({
           user_id: userId,
           type_id: typeMap["consistency_champ"].id
@@ -86,23 +75,13 @@ router.post("/", authMiddleware, async (req, res) => {
       }
     }
 
-    // ——————————————————————————————————————————
-    // 8) Serenity Seeker: anxiety_rating ≤ 3
-    if (
-      anxiety_rating != null &&
-      anxiety_rating <= 3 &&
-      typeMap["calm_climber"] &&      // убедитесь, что в БД есть запись с code = 'calm_climber'
-      !issued.has(typeMap["calm_climber"].id)
-    ) {
+    if (anxiety_rating != null && anxiety_rating <= 3 && typeMap["calm_climber"] && !issued.has(typeMap["calm_climber"].id)) {
       toInsert.push({
         user_id: userId,
         type_id: typeMap["calm_climber"].id
       });
     }
 
-    // ——————————————————————————————————————————
-    // 9) Eagle Eye: 3 объекта ≤ 15 секунд
-    // justFinished — это последняя запись в прогрессе
     const justFinished = progress[progress.length - 1];
     if (
       justFinished.time_taken !== null &&
@@ -116,8 +95,6 @@ router.post("/", authMiddleware, async (req, res) => {
       });
     }
 
-    // ——————————————————————————————————————————
-    // 10) Вставляем все новые ачивки за раз
     if (toInsert.length > 0) {
       await knex("user_achievements").insert(
         toInsert.map(entry => ({
@@ -178,6 +155,34 @@ router.get("/achievements", authMiddleware, async (req, res) => {
   } catch (err) {
     console.error("Error fetching achievements:", err);
     res.status(500).json({ error: "Failed to fetch achievements." });
+  }
+});
+
+// POST /api/achievements/unlock
+router.post("/achievements/unlock", authMiddleware, async (req, res) => {
+  const { key } = req.body;
+  if (!key) return res.status(400).json({ error: "No achievement key provided" });
+
+  try {
+    const type = await knex("achievement_types").where({ code: key }).first();
+    if (!type) return res.status(404).json({ error: "Achievement type not found" });
+
+    const existing = await knex("user_achievements")
+      .where({ user_id: req.user.id, type_id: type.id })
+      .first();
+
+    if (!existing) {
+      await knex("user_achievements").insert({
+        user_id: req.user.id,
+        type_id: type.id,
+        awarded_at: new Date()
+      });
+    }
+
+    res.sendStatus(200);
+  } catch (err) {
+    console.error("[Achievements] unlock error:", err);
+    res.status(500).json({ error: "Server error" });
   }
 });
 
