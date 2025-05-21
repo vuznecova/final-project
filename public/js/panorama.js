@@ -43,7 +43,7 @@ async function fetchAchievements() {
       });
     }
   } catch (err) {
-    console.warn('Cannot load achievements', err);
+    console.warn('Не удалось загрузить достижения', err);
   }
 }
 
@@ -104,7 +104,24 @@ function checkAchievementsOnFinish(elapsed) {
   unlockAchievement(`lvl${level}_complete`);
   if (firstObjectTime && firstObjectTime <= 5) unlockAchievement('eagle_eye');
   if (elapsed <= 20) unlockAchievement('speed_runner');
-  if (chosenAnxiety <= 3) unlockAchievement('calm_climber');
+  if (chosenAnxiety <= 3 && chosenAnxiety > 0) unlockAchievement('calm_climber');
+}
+
+async function saveProgress(elapsed, anxiety) {
+  const token = localStorage.getItem('token');
+  if (!token) return;
+  await fetch('/api/progress', {
+    method: 'POST',
+    headers: {
+      'Authorization': 'Bearer ' + token,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      level,
+      time_taken: elapsed,
+      anxiety_rating: anxiety
+    })
+  });
 }
 
 function showCompletion(elapsed) {
@@ -128,21 +145,33 @@ function showCompletion(elapsed) {
         ${ level < MAX_LEVEL ? '<button id="nextBtn">Next Level</button>' : '' }
         <button id="backBtnModal">Back to Levels</button>
       </div>
+      <p id="anxietyWarning" style="color:red; font-size:0.9em; display:none;">Please rate your anxiety before continuing.</p>
     </div>`;
   document.body.appendChild(wrap);
 
   document.getElementById('retryBtn').onclick = () => location.reload();
+
+  const requireAnxiety = async (cb) => {
+    const warning = document.getElementById('anxietyWarning');
+    if (chosenAnxiety === 0) {
+      warning.style.display = 'block';
+      return;
+    }
+    warning.style.display = 'none';
+    await saveProgress(elapsed, chosenAnxiety);
+    cb();
+  };
+
   const nextBtn = document.getElementById('nextBtn');
   if (nextBtn) {
-    nextBtn.onclick = async () => {
-      await saveProgress(elapsed, chosenAnxiety);
+    nextBtn.onclick = () => requireAnxiety(() => {
       location.href = `panorama.html?level=${level+1}`;
-    };
+    });
   }
-  document.getElementById('backBtnModal').onclick = async () => {
-    await saveProgress(elapsed, chosenAnxiety);
+
+  document.getElementById('backBtnModal').onclick = () => requireAnxiety(() => {
     location.href = 'levels.html';
-  };
+  });
 
   initAnxietyRating();
 }
@@ -231,11 +260,6 @@ function placeTargets() {
 
     scene.appendChild(ent);
   }
-}
-
-function resetHint() {
-  clearTimeout(hintTimeout);
-  hintTimeout = setTimeout(() => {}, 10000);
 }
 
 window.addEventListener('load', async () => {
