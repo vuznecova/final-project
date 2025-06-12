@@ -237,13 +237,28 @@ function initAnxietyRating() {
   });
 }
 
+function updateProgress() {
+  const remaining = total - found;
+  
+  if (totalEl) {
+    totalEl.textContent = remaining; // Только число в span
+  }
+  
+  if (countEl) {
+    countEl.textContent = ''; // Убираем нижнюю надпись
+  }
+  fillEl.style.width = `${Math.round((found / total) * 100)}%`;
+}
+
 function placeTargets() {
   const scene = document.querySelector('a-scene');
   found = 0;
   firstObjectTime = null;
   total = 2 + level;
-  countEl.textContent = `0 / ${total}`;
-  fillEl.style.width = '0%';
+  
+  // Show initial count with remaining objects
+  updateProgress();
+  
   clearTimeout(hintTimeout);
 
   const colors = ['#e78ba8', '#a8d0e6', '#f7a072', '#c3e47d', '#e6c3d8'];
@@ -280,8 +295,10 @@ function placeTargets() {
       clickSound.play();
       ent.remove();
       found++;
-      countEl.textContent = `${found} / ${total}`;
-      fillEl.style.width = `${Math.round((found / total) * 100)}%`;
+      
+      // Update progress display
+      updateProgress();
+      
       if (found === 1) {
         firstObjectTime = (Date.now() - startTime) / 1000;
       }
